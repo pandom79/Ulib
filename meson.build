@@ -10,6 +10,15 @@ prj_name = 'wrapper'
 ver = '1.0.0'
 so_ver = '1'
 
+# Get paths
+prefix = get_option('prefix')
+datadir = get_option('datadir')
+# Set paths
+doc_path = get_option('DOC_PATH')
+if doc_path == ''
+    doc_path  = prefix/datadir/'doc'/prj_name+'-'+ver
+endif
+
 # Dependencies
 math_dep = meson.get_compiler('c').find_library('m', required : true)
 
@@ -28,6 +37,10 @@ pkg.generate(libwrapper,
 
 # Header
 install_headers('wrapper.h', subdir : prj_name)
+
+# Install documentation
+install_data('LICENSE', install_dir: doc_path)
+install_data('README.md', install_dir: doc_path)
 
 # Only for test
 #executable('wrapper', 'main.c',
