@@ -13,6 +13,7 @@ so_ver = '1'
 # Get paths
 prefix = get_option('prefix')
 datadir = get_option('datadir')
+
 # Set paths
 doc_path = get_option('DOC_PATH')
 if doc_path == ''
@@ -35,7 +36,7 @@ pkg.generate(libwrapper,
              subdirs : prj_name
              )
 
-# Header
+# Install Header
 install_headers('wrapper.h', subdir : prj_name)
 
 # Install documentation
