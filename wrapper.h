@@ -59,21 +59,22 @@ void stringReplaceAllChr(char **, const char, const char);
 void stringReplaceStr(char **, const char *, const char *);
 void stringReplaceAllStr(char **, const char *, const char *);
 void objectRelease(void **);
-Array* stringSplit(char *str, const char *sep, bool);
+Array* stringSplit(char *, const char *, bool);
+Array* stringSplitFirst(char *, const char *);
 
 /* Array */
 Array* arrayNew(void (*)(void **));
 Array* arrayNewWithAmount(int, void (*)(void **));
 bool arrayAdd(Array *, void *);
 bool arrayAddFirst(Array *, void *);
-bool arrayRemoveAt(Array *array, int idx);
-bool arrayRemove(Array *array, void *);
+bool arrayRemoveAt(Array *, int);
+bool arrayRemove(Array *, void *);
 bool arrayRelease(Array **);
 bool arraySet(Array *, void *, int);
 bool arrayContainsStr(Array *, const char *);
 Array* arrayStrCopy(Array *);
 void* arrayGet(Array *, int);
-int arrayGetIdx(Array *, void *element);
+int arrayGetIdx(Array *, void *);
 
 /* Date and time */
 int msleep(long);

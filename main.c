@@ -86,4 +86,17 @@ int main()
 
     objectRelease(&date3);
 
+
+//    char *command = stringNew("Run = /usr/sbin/plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session");
+    char *command = stringNew("Run =");
+    Array *values = stringSplitFirst(command, "=");
+
+    int len = values ? values->size : 0;
+    for (int i = 0; i < len; i++) {
+        printf("Valore %i = %s\n", i, (char *)arrayGet(values, i));
+    }
+
+    objectRelease(&command);
+    arrayRelease(&values);
+
 }

@@ -434,13 +434,14 @@ objectRelease(void **element)
     }
 }
 
+/* We split all the occurrences of "sep" getting an array with n elements,
+ * The elements can be allocated or not according "allocElements" parameter value
+*/
 Array*
 stringSplit(char *str, const char *sep, bool allocElements)
 {
     if (str && sep && strstr(str, sep)) {
-        Array *array = (allocElements ?
-                        arrayNew(objectRelease) :
-                        arrayNew(NULL));
+        Array *array = allocElements ? arrayNew(objectRelease) : arrayNew(NULL);
         char *element = NULL;
         do {
             if (!element)
@@ -450,6 +451,33 @@ stringSplit(char *str, const char *sep, bool allocElements)
             else
                 arrayAdd(array, element);
         } while ((element = strtok(NULL, sep)));
+        return array;
+    }
+    return NULL;
+}
+
+/* We split only the first occurrence of "sep" getting an array with two allocated elements: key and value */
+Array*
+stringSplitFirst(char *str, const char *sep)
+{
+    if (str && sep && strstr(str, sep)) {
+        char *equalStr, *key, *value;
+        Array *array = arrayNew(objectRelease);
+        equalStr = key = value = NULL;
+
+        /* Find "sep" substring */
+        equalStr = strstr(str, sep);
+        if (equalStr) {
+            int idx = 0, lenStr = strlen(str);
+            for (; idx < lenStr; idx++) {
+                if (str[idx] == *equalStr)
+                    break;
+            }
+            key = stringSub(str, 0, idx - 1);
+            value = stringSub(str, idx + 1, lenStr - 1);
+            arrayAdd(array, key);
+            arrayAdd(array, value);
+        }
         return array;
     }
     return NULL;
