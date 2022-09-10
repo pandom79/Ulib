@@ -80,8 +80,7 @@ int arrayGetIdx(Array *, void *);
 int msleep(long);
 Time* timeNew(Time *);
 void timeRelease(Time **);
-void timeSetCurrent(Time **);
-void stringSetTimeStamp(char **, Time *);
-void stringSetDiffTime(char **, Time *, Time *);
+char* stringGetTimeStamp(Time *time, bool);
+char* stringGetDiffTime(Time *, Time *);
 
 #endif // WRAPPER_H

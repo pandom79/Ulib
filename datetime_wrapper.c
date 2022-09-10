@@ -88,16 +88,8 @@ timeRelease(Time **time)
     }
 }
 
-void
-timeSetCurrent(Time **time)
-{
-    if (*time)
-        timeRelease(time);
-    *time = timeNew(NULL);
-}
-
-void
-stringSetTimeStamp(char **ret, Time *time)
+char*
+stringGetTimeStamp(Time *time, bool hasMillisec)
 {
     char dateTimeStr[50] = {0};
 
@@ -109,21 +101,34 @@ stringSetTimeStamp(char **ret, Time *time)
 
     struct tm *timeInfo = localtime(&tv.tv_sec);
     strftime(dateTimeStr, 50, "%d %B %Y %H:%M:%S", timeInfo);
+    if (hasMillisec) {
+        strcat(dateTimeStr, ".");
+        long milliSec = time ? *time->durationMillisec : round(tv.tv_nsec / 1.0e6);
+        char millisecStr[10] = {0};
+        sprintf(millisecStr, "%lu", milliSec);
+        strcat(dateTimeStr, millisecStr);
+    }
 
-    objectRelease(ret);
-    *ret = stringNew(dateTimeStr);
+    return stringNew(dateTimeStr);
 }
 
-void
-stringSetDiffTime(char **ret, Time *timeEnd, Time *timeStart)
+char*
+stringGetDiffTime(Time *timeEnd, Time *timeStart)
 {
     char timeStr[50] = {0};
     int day, hour, min, sec;
-    day = hour = min = sec = -1;
+    double diffTime = 0;
+    long *millisecStart, *millisecEnd;
 
-    double diffTime = difftime(*timeEnd->durationSec, *timeStart->durationSec);
-    long *millisecStart = timeStart->durationMillisec;
-    long *millisecEnd = timeEnd->durationMillisec;
+    day = hour = min = sec = -1;
+    millisecStart = millisecEnd = NULL;
+
+    assert(timeEnd);
+    assert(timeStart);
+
+    diffTime = difftime(*timeEnd->durationSec, *timeStart->durationSec);
+    millisecStart = timeStart->durationMillisec;
+    millisecEnd = timeEnd->durationMillisec;
 
     if (diffTime > 0) {
         long diffMillisec = (1000 - *millisecStart + *millisecEnd);
@@ -174,6 +179,5 @@ stringSetDiffTime(char **ret, Time *timeEnd, Time *timeStart)
         long diffMillisec = *millisecEnd - *millisecStart;
         sprintf(timeStr, "0.%lds", diffMillisec);
     }
-    objectRelease(ret);
-    *ret = stringNew(timeStr);
+    return stringNew(timeStr);
 }

@@ -50,7 +50,7 @@ int main()
 
 
     char *date = NULL;
-    stringSetTimeStamp(&date, dateTime);
+//    stringSetTimeStamp(&date, dateTime);
     printf("Date = %s\n", date);
 
     msleep(540);
@@ -58,7 +58,7 @@ int main()
 
 //TIME 2
     Time *dateTime2 = timeNew(NULL);
-    stringSetTimeStamp(&date, dateTime2);
+//    stringSetTimeStamp(&date, dateTime2);
 
     printf("Date2 = %s\n", date);
 
@@ -66,7 +66,7 @@ int main()
 
 //    long diffTimeLong = difftime(*dateTime2->sec, *dateTime->sec);
     char *diffTimeStr = NULL;
-    stringSetDiffTime(&diffTimeStr, dateTime2, dateTime);
+//    stringSetDiffTime(&diffTimeStr, dateTime2, dateTime);
     printf("diffTimeStr = %s\n", diffTimeStr);
     objectRelease(&diffTimeStr);
 
@@ -78,10 +78,10 @@ int main()
     //TIME 3
     msleep(540);
     char *date3 = NULL;
-    stringSetTimeStamp(&date3, NULL);
+//    stringSetTimeStamp(&date3, NULL);
     printf("Date3 = %s\n", date3);
 
-    stringSetTimeStamp(&date3, NULL);
+//    stringSetTimeStamp(&date3, NULL);
     printf("Date3 without millisec = %s\n", date3);
 
     objectRelease(&date3);
@@ -98,5 +98,43 @@ int main()
 
     objectRelease(&command);
     arrayRelease(&values);
+
+
+//    Time *current = timeNew(NULL);
+//    char *currentTimeStamp = stringGetTimeStamp(current, false);
+
+//    printf("currentTimeStamp = %s\n", currentTimeStamp);
+
+//    timeRelease(&current);
+//    objectRelease(&currentTimeStamp);
+    Time *timeA = timeNew(NULL);
+    char *timeStampA = stringGetTimeStamp(timeA, true);
+    printf("timestampA = %s\n", timeStampA);
+    msleep(1000);
+
+    char *timeStampB = stringGetTimeStamp(NULL, true);
+    printf("timestampB prima volta = %s\n", timeStampB);
+    objectRelease(&timeStampB);
+
+    Time *timeB = timeNew(NULL);
+    timeStampB = stringGetTimeStamp(timeB, true);
+    printf("timestampB = %s\n", timeStampB);
+    objectRelease(&timeStampB);
+
+
+    char *diffTime = stringGetDiffTime(timeB, timeA);
+
+    char *prova = stringNew("Ciao");
+    printf("diffTime = %s\n", diffTime);
+    printf("prova = %s\n", prova);
+    stringSet(&prova, diffTime);
+    printf("prova = %s\n", prova);
+
+    timeRelease(&timeA);
+    timeRelease(&timeB);
+    objectRelease(&diffTime);
+    objectRelease(&prova);
+    objectRelease(&timeStampA);
+    objectRelease(&timeStampB);
 
 }
