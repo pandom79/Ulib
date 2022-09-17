@@ -18,7 +18,7 @@
 typedef struct {
     void **arr;
     int size;
-    void (*release_fn)(void **);
+    void (*releaseFn)(void **);
 } Array;
 
 typedef struct {

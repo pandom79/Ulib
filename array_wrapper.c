@@ -14,15 +14,15 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
  * It's optional thus can accept NULL value.
 */
 Array*
-arrayNew(void (*release_fn)(void **))
+arrayNew(void (*releaseFn)(void **))
 {
     Array *array = calloc(1, sizeof(Array));
     assert(array);
     array->size = 0;
     array->arr = calloc(1, sizeof(void *));
     assert(array->arr);
-    if (release_fn)
-        array->release_fn = release_fn;
+    if (releaseFn)
+        array->releaseFn = releaseFn;
 
     return array;
 }
@@ -33,7 +33,7 @@ arrayNew(void (*release_fn)(void **))
  * It's optional thus can accept NULL value.
 */
 Array*
-arrayNewWithAmount(int amount, void (*release_fn)(void **))
+arrayNewWithAmount(int amount, void (*releaseFn)(void **))
 {
     if (amount > 0) {
         Array *array = calloc(1, sizeof(Array));
@@ -41,8 +41,8 @@ arrayNewWithAmount(int amount, void (*release_fn)(void **))
         array->size = amount;
         array->arr = calloc(amount, sizeof(void *));
         assert(array->arr);
-        if (release_fn)
-            array->release_fn = release_fn;
+        if (releaseFn)
+            array->releaseFn = releaseFn;
 
         return array;
     }
@@ -95,11 +95,11 @@ arrayRemoveAt(Array *array, int idx)
     if (array) {
         void **arr = array->arr;
         int *size = &array->size;
-        void (*release_fn)(void **) = array->release_fn;
+        void (*releaseFn)(void **) = array->releaseFn;
         if (arr && idx >= 0 && idx < *size) {
             /* Clean the item */
-            if (release_fn)
-                (*release_fn)(&(arr[idx]));
+            if (releaseFn)
+                (*releaseFn)(&(arr[idx]));
 
             if (idx < (*size - 1))
                 memmove(arr + idx, arr + idx + 1, (*size - (idx + 1)) * sizeof(void *));
@@ -121,12 +121,12 @@ arrayRemove(Array *array, void *element)
     if (array) {
         void **arr = array->arr;
         int *size = &array->size;
-        void (*release_fn)(void **) = array->release_fn;
+        void (*releaseFn)(void **) = array->releaseFn;
         for (int i = 0; i < *size; i++) {
             if (arr[i] == element) {
                 /* Clean the item */
-                if (release_fn)
-                    (*release_fn)(&element);
+                if (releaseFn)
+                    (*releaseFn)(&element);
 
                 if (i < (*size - 1))
                     memmove(arr + i, arr + i + 1, (*size - (i + 1)) * sizeof(void *));
@@ -147,8 +147,8 @@ arrayRelease(Array **array)
 {
     if (*array) {
         void **arr = (*array)->arr;
-        void (*release_fn)(void **) = (*array)->release_fn;
-        if (release_fn) {
+        void (*releaseFn)(void **) = (*array)->releaseFn;
+        if (releaseFn) {
             int *size = &(*array)->size;
             for (int i = 0; i < *size; )
                 arrayRemoveAt((*array), i);
@@ -174,9 +174,9 @@ arraySet(Array *array, void *element, int idx)
 {
     if (array && element && idx < array->size) {
         void **arr = array->arr;
-        void (*release_fn)(void **) = array->release_fn;
-        if (release_fn)
-            release_fn(&(arr[idx]));
+        void (*releaseFn)(void **) = array->releaseFn;
+        if (releaseFn)
+            releaseFn(&(arr[idx]));
 
         arr[idx] = element;
         return true;
