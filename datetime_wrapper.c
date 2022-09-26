@@ -89,7 +89,7 @@ timeRelease(Time **time)
 }
 
 char*
-stringGetTimeStamp(Time *time, bool hasMillisec)
+stringGetTimeStamp(Time *time, bool hasMillisec, const char *format)
 {
     char dateTimeStr[50] = {0};
 
@@ -100,7 +100,7 @@ stringGetTimeStamp(Time *time, bool hasMillisec)
         clock_gettime(CLOCK_REALTIME, &tv);
 
     struct tm *timeInfo = localtime(&tv.tv_sec);
-    strftime(dateTimeStr, 50, "%d %B %Y %H:%M:%S", timeInfo);
+    strftime(dateTimeStr, 50, format ? format : "%d %B %Y %H:%M:%S", timeInfo);
     if (hasMillisec) {
         strcat(dateTimeStr, ".");
         long milliSec = time ? *time->durationMillisec : round(tv.tv_nsec / 1.0e6);

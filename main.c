@@ -1,5 +1,22 @@
 #include "wrapper.h"
 
+//#define LOG_A    0x1
+//#define LOG_B    0x10
+//#define LOG_C    0x100
+//#define LOG_D    0x1000
+//#define LOG_E    0x10000
+//#define LOG_F    0x100000
+//#define LOG_ALL  0x111111
+
+// Hex
+#define LOG_A    0x1
+#define LOG_B    0x2
+#define LOG_C    0x4
+#define LOG_D    0x8
+#define LOG_E    0x10
+#define LOG_F    0x20
+#define LOG_ALL  0x3F
+
 int main()
 {
 //    time_t now = time(NULL);
@@ -108,33 +125,50 @@ int main()
 //    timeRelease(&current);
 //    objectRelease(&currentTimeStamp);
     Time *timeA = timeNew(NULL);
-    char *timeStampA = stringGetTimeStamp(timeA, true);
+    char *timeStampA = stringGetTimeStamp(timeA, true, NULL);
     printf("timestampA = %s\n", timeStampA);
     msleep(1000);
 
-    char *timeStampB = stringGetTimeStamp(NULL, true);
+    char *timeStampB = stringGetTimeStamp(NULL, true, NULL);
     printf("timestampB prima volta = %s\n", timeStampB);
     objectRelease(&timeStampB);
 
     Time *timeB = timeNew(NULL);
-    timeStampB = stringGetTimeStamp(timeB, true);
+    timeStampB = stringGetTimeStamp(timeB, false, "%d %b %Y %H:%M:%S");
+//    timeStampB = stringGetTimeStamp(timeB, false, NULL);
     printf("timestampB = %s\n", timeStampB);
     objectRelease(&timeStampB);
 
 
-    char *diffTime = stringGetDiffTime(timeB, timeA);
+//    char *diffTime = stringGetDiffTime(timeB, timeA);
 
-    char *prova = stringNew("Ciao");
-    printf("diffTime = %s\n", diffTime);
-    printf("prova = %s\n", prova);
-    stringSet(&prova, diffTime);
-    printf("prova = %s\n", prova);
+//    char *prova = stringNew("Ciao");
+//    printf("diffTime = %s\n", diffTime);
+//    printf("prova = %s\n", prova);
+//    stringSet(&prova, diffTime);
+//    printf("prova = %s\n", prova);
 
     timeRelease(&timeA);
     timeRelease(&timeB);
-    objectRelease(&diffTime);
-    objectRelease(&prova);
+//    objectRelease(&diffTime);
+//    objectRelease(&prova);
     objectRelease(&timeStampA);
     objectRelease(&timeStampB);
+//    int res = (LOG_A | LOG_B | LOG_C);
+//    printf("LOG_A = %d\n", LOG_A);
+//    printf("LOG_B = %d\n", LOG_B);
+//    printf("LOG_C = %d\n", LOG_C);
+//    printf("LOG_D = %d\n", LOG_D);
+//    printf("LOG_ALL = %d\n", LOG_ALL);
+
+////    int res = (LOG_A | LOG_E | LOG_C | LOG_D | LOG_F);
+//    int res = (LOG_ALL);
+//    bool res_LOG_A = res & LOG_A;
+//    bool res_LOG_B = res & LOG_B;
+//    bool res_LOG_C = res & LOG_C;
+//    bool res_LOG_D = res & LOG_D;
+//    bool res_LOG_E = res & LOG_E;
+//    bool res_LOG_F = res & LOG_F;
+//    bool res_LOG_ALL = res & LOG_ALL;
 
 }

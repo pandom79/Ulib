@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('wrapper', 'c', version: '2.0.0', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('wrapper', 'c', version: '2.0.1', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'wrapper'
-ver = '2.0.0'
+ver = '2.0.1'
 so_ver = '2'
 
 # Get paths
