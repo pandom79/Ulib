@@ -103,7 +103,7 @@ stringGetTimeStamp(Time *time, bool hasMillisec, const char *format)
     strftime(dateTimeStr, 50, format ? format : "%d %B %Y %H:%M:%S", timeInfo);
     if (hasMillisec) {
         strcat(dateTimeStr, ".");
-        long milliSec = time ? *time->durationMillisec : round(tv.tv_nsec / 1.0e6);
+        long milliSec = round(tv.tv_nsec / 1.0e6);
         char millisecStr[10] = {0};
         sprintf(millisecStr, "%lu", milliSec);
         strcat(dateTimeStr, millisecStr);
