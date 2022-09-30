@@ -23,6 +23,7 @@ typedef struct {
 
 typedef struct {
     long *sec;
+    long *milliSec;
     long *durationSec;
     long *durationMillisec;
 } Time;
@@ -79,6 +80,7 @@ int arrayGetIdx(Array *, void *);
 /* Date and time */
 int msleep(long);
 Time* timeNew(Time *);
+void timeSet(Time **, const Time *);
 void timeRelease(Time **);
 char* stringGetTimeStamp(Time *time, bool, const char *);
 char* stringGetDiffTime(Time *, Time *);

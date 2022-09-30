@@ -37,6 +37,10 @@ timeNew(Time *timeFrom)
     long *sec = calloc(1, sizeof(long));
     assert(sec);
 
+    //Millisec
+    long *milliSec = calloc(1, sizeof(long));
+    assert(milliSec);
+
     //Duration sec
     long *durationSec = calloc(1, sizeof(long));
     assert(durationSec);
@@ -50,6 +54,7 @@ timeNew(Time *timeFrom)
         struct timespec timeSpec = {0};
         clock_gettime(CLOCK_REALTIME, &timeSpec);
         *sec = timeSpec.tv_sec;
+        *milliSec = round(timeSpec.tv_nsec / 1.0e6);
 
         //Duration
         struct timespec durationSpec = {0};
@@ -64,16 +69,32 @@ timeNew(Time *timeFrom)
     }
     else {
         *sec = *timeFrom->sec;
+        *milliSec = *timeFrom->milliSec;
         /* Duration */
         *durationSec = *timeFrom->durationSec;
         *durationMillisec = *timeFrom->durationMillisec;
     }
 
     time->sec = sec;
+    time->milliSec = milliSec;
     time->durationSec = durationSec;
     time->durationMillisec = durationMillisec;
 
     return time;
+}
+
+void
+timeSet(Time **timeA, const Time *timeB)
+{
+    if (timeB) {
+        if (*timeA)
+            timeRelease(timeA);
+        *timeA = timeNew(NULL);
+        *(*timeA)->sec = *timeB->sec;
+        *(*timeA)->milliSec = *timeB->milliSec;
+        *(*timeA)->durationSec = *timeB->durationSec;
+        *(*timeA)->durationMillisec = *timeB->durationMillisec;
+    }
 }
 
 void
@@ -82,6 +103,7 @@ timeRelease(Time **time)
     Time *timeTemp = *time;
     if (timeTemp) {
         objectRelease(&timeTemp->sec);
+        objectRelease(&timeTemp->milliSec);
         objectRelease(&timeTemp->durationSec);
         objectRelease(&timeTemp->durationMillisec);
         objectRelease(time);
@@ -94,10 +116,12 @@ stringGetTimeStamp(Time *time, bool hasMillisec, const char *format)
     char dateTimeStr[50] = {0};
 
     struct timespec tv;
-    if (time)
+    clock_gettime(CLOCK_REALTIME, &tv);
+
+    if (time) {
         tv.tv_sec = *time->sec;
-    else
-        clock_gettime(CLOCK_REALTIME, &tv);
+        tv.tv_nsec = round(*time->milliSec * 1.0e6);
+    }
 
     struct tm *timeInfo = localtime(&tv.tv_sec);
     strftime(dateTimeStr, 50, format ? format : "%d %B %Y %H:%M:%S", timeInfo);
