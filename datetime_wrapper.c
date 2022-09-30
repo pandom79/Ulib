@@ -89,11 +89,7 @@ timeSet(Time **timeA, const Time *timeB)
     if (timeB) {
         if (*timeA)
             timeRelease(timeA);
-        *timeA = timeNew(NULL);
-        *(*timeA)->sec = *timeB->sec;
-        *(*timeA)->milliSec = *timeB->milliSec;
-        *(*timeA)->durationSec = *timeB->durationSec;
-        *(*timeA)->durationMillisec = *timeB->durationMillisec;
+        *timeA = timeNew((Time *)timeB);
     }
 }
 
