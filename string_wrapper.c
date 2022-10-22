@@ -474,7 +474,7 @@ stringSplitFirst(char *str, const char *sep)
                     break;
             }
             key = stringSub(str, 0, idx - 1);
-            value = stringSub(str, idx + 1, lenStr - 1);
+            value = stringSub(str, idx + strlen(sep), lenStr - 1);
             arrayAdd(array, key);
             arrayAdd(array, value);
         }

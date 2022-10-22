@@ -134,11 +134,10 @@ int main()
     objectRelease(&timeStampB);
 
     Time *timeB = timeNew(NULL);
-    timeStampB = stringGetTimeStamp(timeB, false, "%d %b %Y %H:%M:%S");
+    timeStampB = stringGetTimeStamp(timeB, false, "%d-%m-%Y %H:%M:%S");
 //    timeStampB = stringGetTimeStamp(timeB, false, NULL);
     printf("timestampB = %s\n", timeStampB);
     objectRelease(&timeStampB);
-
 
 //    char *diffTime = stringGetDiffTime(timeB, timeA);
 
@@ -170,5 +169,12 @@ int main()
 //    bool res_LOG_E = res & LOG_E;
 //    bool res_LOG_F = res & LOG_F;
 //    bool res_LOG_ALL = res & LOG_ALL;
+    const char *test = "ciao..mimmo";
+    Array *entries = stringSplitFirst((char *)test, "..");
+    if (entries)
+    for (int i = 0; i < entries->size; i++) {
+        printf("Entry of %d = %s\n", i , (char *)arrayGet(entries, i));
+    }
+    arrayRelease(&entries);
 
 }
