@@ -12,7 +12,8 @@
 #include <stddef.h>
 #include <errno.h>
 #include <math.h>
-
+#include <sys/types.h>
+#include <inttypes.h>
 
 /* Types */
 typedef struct {
@@ -62,6 +63,7 @@ void stringReplaceAllStr(char **, const char *, const char *);
 void objectRelease(void **);
 Array* stringSplit(char *, const char *, bool);
 Array* stringSplitFirst(char *, const char *);
+char* stringGetFileSize(off_t);
 
 /* Array */
 Array* arrayNew(void (*)(void **));

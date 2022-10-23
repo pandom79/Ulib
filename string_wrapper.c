@@ -8,6 +8,9 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 #include "wrapper.h"
 
+static const char *SIZES[]   = { "EB", "PB", "TB", "GB", "MB", "KB", "B" };
+static const off_t EXBIBYTES = 1024ULL * 1024ULL * 1024ULL *
+                               1024ULL * 1024ULL * 1024ULL;
 char*
 stringNew(const char *str)
 {
@@ -480,5 +483,32 @@ stringSplitFirst(char *str, const char *sep)
         }
         return array;
     }
+    return NULL;
+}
+
+char*
+stringGetFileSize(off_t fileSize)
+{
+    if (fileSize > -1) {
+        char *result = (char *) calloc(20, sizeof(char));
+        off_t multiplier = EXBIBYTES;
+        int i;
+
+        for (i = 0; i < 7; i++, multiplier /= 1024)
+        {
+            if (fileSize < multiplier)
+                continue;
+            if (fileSize % multiplier == 0)
+                sprintf(result, "%" PRIu64 "%s", fileSize / multiplier, SIZES[i]);
+            else
+                sprintf(result, "%.1f%s", (float) fileSize / multiplier, SIZES[i]);
+
+            stringReplaceChr(&result, '.', ',');
+            return result;
+        }
+        strcpy(result, "0");
+        return result;
+    }
+
     return NULL;
 }

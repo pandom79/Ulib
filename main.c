@@ -177,4 +177,17 @@ int main()
     }
     arrayRelease(&entries);
 
+
+//    off_t fileSize = 1234567789110;
+//    off_t fileSize = 34567789110;
+//    off_t fileSize = 4353452039451181;
+//    off_t fileSize = 67789110;
+//    off_t fileSize = 67789110;
+//    off_t fileSize = 1568061;
+    off_t fileSize = 102;
+    printf("fileSize = %lu\n", fileSize);
+    char *result = stringGetFileSize(fileSize);
+    printf("Result = %s\n", result);
+    objectRelease(&result);
+
 }
