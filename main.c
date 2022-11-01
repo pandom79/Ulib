@@ -190,4 +190,16 @@ int main()
     printf("Result = %s\n", result);
     objectRelease(&result);
 
+    char *test1 = stringNew("CatMimmoTreMimmoCiao");
+//    stringAppendChr(&test1, '!');
+//    stringAppendStr(&test1, "");
+//    stringPrependChr(&test1, '&');
+//    stringPrependStr(&test1, "PrependStr");
+
+//    stringInsertChrAt(&test1, '!', 1);
+    stringReplaceStr(&test1, "Mimmo", "ProvaReplace");
+
+    printf("Test1 = %s\n", test1);
+    objectRelease(&test1);
+
 }

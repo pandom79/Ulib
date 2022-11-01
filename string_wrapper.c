@@ -137,8 +137,7 @@ stringAppendChr(char **a, const char b)
 {
     if (a && b) {
         char supp[] = { b, '\0' };
-        strcat(*a, supp);
-        return true;
+        return stringConcat(a, supp);
     }
     else
         return false;
@@ -147,10 +146,8 @@ stringAppendChr(char **a, const char b)
 bool
 stringAppendStr(char **a, const char *b)
 {
-    if (a && b) {
-        strcat(*a, b);
-        return true;
-    }
+    if (a && b)
+        return stringConcat(a, b);
     else
         return false;
 }
@@ -180,7 +177,7 @@ stringPrependChr(char **a, const char b)
         char *copyA = stringNew(*a);
         (*a)[1] = '\0';
         (*a)[0] = b;
-        strcat(*a, copyA);
+        stringAppendStr(a, copyA);
         objectRelease(&copyA);
         return true;
     }
@@ -194,8 +191,8 @@ stringPrependStr(char **a, const char *b)
     if (a && b) {
         char *copyA = stringNew(*a);
         **a = '\0';
-        strcat(*a, b);
-        strcat(*a, copyA);
+        stringAppendStr(a, b);
+        stringAppendStr(a, copyA);
         objectRelease(&copyA);
         return true;
     }
@@ -212,8 +209,8 @@ stringInsertChrAt(char **a, const char b, int pos)
             char *copyA = stringNew(*a);
             char supp[] = { b, '\0' };
             (*a)[pos] = '\0';
-            strcat(*a + pos, supp);
-            strcat(*a + pos + 1, copyA + pos);
+            memmove(*a + pos, supp, strlen(supp));
+            memmove(*a + pos + 1, copyA + pos, strlen(copyA) - pos);
             objectRelease(&copyA);
             return true;
         }
@@ -226,11 +223,12 @@ stringInsertStrAt(char **a, const char *b, int pos)
 {
     if (a && b) {
         int lenA = strlen(*a);
+        int lenB = strlen(b);
         if (pos >= 0 && pos <= lenA) {
             char *copyA = stringNew(*a);
             (*a)[pos] = '\0';
-            strcat(*a + pos, b);
-            strcat(*a + pos + 1, copyA + pos);
+            memmove(*a + pos, b, lenB);
+            memmove(*a + pos + lenB, copyA + pos, lenA - pos);
             objectRelease(&copyA);
             return true;
         }
@@ -412,8 +410,8 @@ stringReplaceStr(char **origin, const char *search, const char *replace)
         char *copyOrigin = stringNew(*origin);
         int index = temp - *origin;
         (*origin)[index] = '\0';
-        strcat(*origin, replace);
-        strcat(*origin, copyOrigin + index + strlen(search));
+        stringAppendStr(origin, replace);
+        stringAppendStr(origin, copyOrigin + index + strlen(search));
         objectRelease(&copyOrigin);
     }
 }
