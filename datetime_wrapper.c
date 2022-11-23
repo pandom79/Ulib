@@ -204,5 +204,6 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
         long diffMillisec = *millisecEnd - *millisecStart;
         sprintf(timeStr, "0.%lds", diffMillisec);
     }
-    return stringNew(timeStr);
+
+    return stringTrim(stringNew(timeStr), NULL);
 }
