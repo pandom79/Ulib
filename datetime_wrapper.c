@@ -121,11 +121,13 @@ stringGetTimeStamp(Time *time, bool hasMillisec, const char *format)
 
     struct tm *timeInfo = localtime(&tv.tv_sec);
     strftime(dateTimeStr, 50, format ? format : "%d %B %Y %H:%M:%S", timeInfo);
+    assert(strlen(dateTimeStr) > 0);
     if (hasMillisec) {
         strcat(dateTimeStr, ".");
         long milliSec = round(tv.tv_nsec / 1.0e6);
         char millisecStr[10] = {0};
         sprintf(millisecStr, "%lu", milliSec);
+        assert(strlen(millisecStr) > 0);
         strcat(dateTimeStr, millisecStr);
     }
 
@@ -176,24 +178,27 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
         if (day != -1 && day > 0) {
             char dayStr[10] = {0};
             sprintf(dayStr, "%dd ", day);
+            assert(strlen(dayStr) > 0);
             strcat(timeStr, dayStr);
         }
         if (hour != -1 && hour > 0) {
             char hourStr[20] = {0};
             sprintf(hourStr, "%dh ", hour);
+            assert(strlen(hourStr) > 0);
             strcat(timeStr, hourStr);
         }
         if (min != -1 && min > 0) {
             char minStr[20] = {0};
             sprintf(minStr, "%dm ", min);
+            assert(strlen(minStr) > 0);
             strcat(timeStr, minStr);
         }
         if (sec != -1) {
             char secStr[40] = {0};
             sprintf(secStr, "%d.%lds ", sec, diffMillisec);
+            assert(strlen(secStr) > 0);
             strcat(timeStr, secStr);
         }
-
     }
     else {
         long diffMillisec = *millisecEnd - *millisecStart;

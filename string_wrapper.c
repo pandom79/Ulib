@@ -505,6 +505,7 @@ stringGetFileSize(off_t fileSize)
             return result;
         }
         strcpy(result, "0");
+        assert(strlen(result) > 0);
         return result;
     }
 
