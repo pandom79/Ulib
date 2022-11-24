@@ -205,5 +205,6 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
         sprintf(timeStr, "0.%lds", diffMillisec);
     }
 
+    assert(strlen(timeStr) > 0);
     return stringTrim(stringNew(timeStr), NULL);
 }
