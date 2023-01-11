@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('wrapper', 'c', version: '2.0.5', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('wrapper', 'c', version: '2.0.6', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'wrapper'
-ver = '2.0.5'
+ver = '2.0.6'
 so_ver = '2'
 
 # Get paths
@@ -26,18 +26,18 @@ math_dep = meson.get_compiler('c').find_library('m', required : true)
 # Library
 libwrapper = library(prj_name, 'string_wrapper.c', 'array_wrapper.c', 'datetime_wrapper.c',
                      version: ver, soversion: so_ver,
-                     install: true, dependencies : math_dep
+                     install: true, dependencies: math_dep
                      )
 
 # Generate pc file
 pkg = import('pkgconfig')
 pkg.generate(libwrapper,
-             description : 'This library provides some functions to handle strings and array in C language.',
-             subdirs : prj_name
+             description: 'This library provides some functions to handle strings and array in C language.',
+             subdirs: prj_name
              )
 
 # Install Header
-install_headers('wrapper.h', subdir : prj_name)
+install_headers('wrapper.h', subdir: prj_name)
 
 # Install documentation
 install_data('LICENSE', install_dir: doc_path)

@@ -150,7 +150,7 @@ arrayRelease(Array **array)
         void (*releaseFn)(void **) = (*array)->releaseFn;
         if (releaseFn) {
             int *size = &(*array)->size;
-            for (int i = 0; i < *size; )
+            for (int i = 0; i < *size;)
                 arrayRemoveAt((*array), i);
         }
         if (arr) {

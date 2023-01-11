@@ -193,16 +193,19 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
             assert(strlen(minStr) > 0);
             strcat(timeStr, minStr);
         }
-        if (sec != -1) {
+        if (sec != -1 && (sec > 0 || diffMillisec > 0)) {
             char secStr[40] = {0};
-            sprintf(secStr, "%d.%lds ", sec, diffMillisec);
+            if (diffMillisec > 0)
+                sprintf(secStr, "%d.%lds ", sec, diffMillisec);
+            else
+                sprintf(secStr, "%ds ", sec);
             assert(strlen(secStr) > 0);
             strcat(timeStr, secStr);
         }
     }
     else {
         long diffMillisec = *millisecEnd - *millisecStart;
-        sprintf(timeStr, "0.%lds", diffMillisec);
+        sprintf(timeStr, diffMillisec == 0 ? "%lds" : "0.%lds", diffMillisec);
     }
 
     assert(strlen(timeStr) > 0);
