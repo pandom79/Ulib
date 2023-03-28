@@ -1,5 +1,5 @@
-#ifndef WRAPPER_H
-#define WRAPPER_H
+#ifndef ULIB_H
+#define ULIB_H
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -43,7 +43,6 @@ void stringToupper(char *);
 void stringTolower(char *);
 bool stringAppendChr(char **, const char);
 bool stringAppendStr(char **, const char *);
-bool stringConcat(char **, const char *);
 bool stringPrependChr(char **, const char);
 bool stringPrependStr(char **, const char *);
 bool stringInsertChrAt(char **, const char, int);
@@ -60,6 +59,10 @@ void stringReplaceChr(char **, const char, const char);
 void stringReplaceAllChr(char **, const char, const char);
 void stringReplaceStr(char **, const char *, const char *);
 void stringReplaceAllStr(char **, const char *, const char *);
+bool stringEquals(const char *, const char *);
+bool stringEqualsN(const char *, const char *, size_t);
+bool stringEqualsIgnCase(const char *, const char *);
+bool stringEqualsIgnCaseN(const char *, const char *, size_t);
 void objectRelease(void **);
 Array* stringSplit(char *, const char *, bool);
 Array* stringSplitFirst(char *, const char *);
@@ -87,4 +90,4 @@ void timeRelease(Time **);
 char* stringGetTimeStamp(Time *time, bool, const char *);
 char* stringGetDiffTime(Time *, Time *);
 
-#endif // WRAPPER_H
+#endif // ULIB_H

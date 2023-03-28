@@ -137,7 +137,7 @@ stringAppendChr(char **a, const char b)
 {
     if (a && b) {
         char supp[] = { b, '\0' };
-        return stringConcat(a, supp);
+        return stringAppendStr(a, supp);
     }
     else
         return false;
@@ -145,15 +145,6 @@ stringAppendChr(char **a, const char b)
 
 bool
 stringAppendStr(char **a, const char *b)
-{
-    if (a && b)
-        return stringConcat(a, b);
-    else
-        return false;
-}
-
-bool
-stringConcat(char **a, const char *b)
 {
     if (a) {
         if (b) {
@@ -170,8 +161,7 @@ stringConcat(char **a, const char *b)
         return false;
 }
 
-bool
-stringPrependChr(char **a, const char b)
+bool stringPrependChr(char **a, const char b)
 {
     if (a && b) {
         char *copyA = stringNew(*a);
@@ -426,6 +416,42 @@ stringReplaceAllStr(char **origin, const char *search, const char *replace)
      }
 }
 
+bool
+stringEquals(const char *s1, const char *s2)
+{
+    if (strcmp(s1, s2) == 0)
+        return true;
+    else
+        return false;
+}
+
+bool
+stringEqualsN(const char *s1, const char *s2, size_t n)
+{
+    if (strncmp(s1, s2, n) == 0)
+        return true;
+    else
+        return false;
+}
+
+bool
+stringEqualsIgnCase(const char *s1, const char *s2)
+{
+    if (strcasecmp(s1, s2) == 0)
+        return true;
+    else
+        return false;
+}
+
+bool
+stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
+{
+    if (strncasecmp(s1, s2, n) == 0)
+        return true;
+    else
+        return false;
+}
+
 void
 objectRelease(void **element)
 {
@@ -462,16 +488,16 @@ Array*
 stringSplitFirst(char *str, const char *sep)
 {
     if (str && sep && strstr(str, sep)) {
-        char *equalStr, *key, *value;
+        char *sepStr, *key, *value;
         Array *array = arrayNew(objectRelease);
-        equalStr = key = value = NULL;
+        sepStr = key = value = NULL;
 
         /* Find "sep" substring */
-        equalStr = strstr(str, sep);
-        if (equalStr) {
+        sepStr = strstr(str, sep);
+        if (sepStr) {
             int idx = 0, lenStr = strlen(str);
             for (; idx < lenStr; idx++) {
-                if (str[idx] == *equalStr)
+                if (str[idx] == *sepStr)
                     break;
             }
             key = stringSub(str, 0, idx - 1);

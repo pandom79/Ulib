@@ -3,12 +3,12 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '2.0.7', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '3.0.0', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '2.0.7'
-so_ver = '2'
+ver = '3.0.0'
+so_ver = '3'
 
 # Get paths
 prefix = get_option('prefix')
@@ -43,7 +43,12 @@ install_headers('ulib.h', subdir: prj_name)
 install_data('LICENSE', install_dir: doc_path)
 install_data('README.md', install_dir: doc_path)
 
-# Only for test
-#executable('wrapper', 'main.c',
-#           link_with: libwrapper, install: true
-#          )
+# Test
+test_string_new = executable('test_string_new', 'test/string_new.c', link_with: ulib)
+test_string_append = executable('test_string_append', 'test/string_append.c', link_with: ulib)
+test_string_equals = executable('test_string_equals', 'test/string_equals.c', link_with: ulib)
+test_string_split = executable('test_string_split', 'test/string_split.c', link_with: ulib)
+test('Test string new', test_string_new)
+test('Test string append', test_string_append)
+test('Test string equals', test_string_equals)
+test('Test string split', test_string_split)
