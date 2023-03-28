@@ -11,7 +11,6 @@ Run the following steps:</br>
 cd wrapper
 meson setup build
 cd build
-meson configure
 meson compile
 meson install
 ```
