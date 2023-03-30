@@ -66,7 +66,9 @@ jobs:
 
     - run: |
          echo "Building with meson"
-         ./build.sh
+         meson setup build
+         meson compile build
+         meson install build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
