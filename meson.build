@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '3.0.0', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '3.0.1', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '3.0.0'
+ver = '3.0.1'
 so_ver = '3'
 
 # Get paths
@@ -48,7 +48,11 @@ test_string_new = executable('test_string_new', 'test/string_new.c', link_with: 
 test_string_append = executable('test_string_append', 'test/string_append.c', link_with: ulib)
 test_string_equals = executable('test_string_equals', 'test/string_equals.c', link_with: ulib)
 test_string_split = executable('test_string_split', 'test/string_split.c', link_with: ulib)
-test('Test string new', test_string_new)
-test('Test string append', test_string_append)
-test('Test string equals', test_string_equals)
-test('Test string split', test_string_split)
+test_array_str_copy = executable('test_array_str_copy', 'test/array_str_copy.c', link_with: ulib)
+test_array_str_contains = executable('test_array_str_contains', 'test/array_str_contains.c', link_with: ulib)
+test('test_string_new', test_string_new)
+test('test_string_append', test_string_append)
+test('test_string_equals', test_string_equals)
+test('test_string_split', test_string_split)
+test('test_array_str_copy', test_array_str_copy)
+test('test_array_str_contains', test_array_str_contains)

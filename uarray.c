@@ -191,7 +191,7 @@ arrayContainsStr(Array *array, const char *str)
 {
     int len = (array ? array->size : 0);
     for (int i = 0; i < len; i++) {
-        if (strcmp(str, arrayGet(array, i)) == 0)
+        if (stringEquals(str, arrayGet(array, i)))
             return true;
     }
 
