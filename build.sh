@@ -1,5 +1,5 @@
 #!/bin/sh
 
-meson setup build
-meson compile build
-meson install build
+export PATH="/bin:/usr/bin:/sbin:/usr/sbin:"
+
+meson --version
