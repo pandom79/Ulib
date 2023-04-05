@@ -5,4 +5,5 @@
 #See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 option('DOC_PATH', type: 'string', description: 'The documentation path')
-
+option('DOXY_HTML', type: 'boolean', value: true)
+option('DOXY_LATEX', type: 'boolean', value: true)

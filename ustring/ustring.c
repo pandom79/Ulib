@@ -6,7 +6,7 @@ it under the terms of the GNU General Public License version 3.
 See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 */
 
-#include "ulib.h"
+#include "../ulib.h"
 
 static const char *SIZES[]   = { "EB", "PB", "TB", "GB", "MB", "KB", "B" };
 static const off_t EXBIBYTES = 1024ULL * 1024ULL * 1024ULL *
@@ -16,7 +16,7 @@ stringNew(const char *str)
 {
     char *ret = NULL;
     if (str) {
-        ret = calloc(strlen(str) + 1, sizeof(str));
+        ret = calloc(strlen(str) + 1, sizeof(char));
         assert(ret);
         assert(strcpy(ret, str));
     }
@@ -483,28 +483,16 @@ stringSplit(char *str, const char *sep, bool allocElements)
     return NULL;
 }
 
-/* We split only the first occurrence of "sep" getting an array with two allocated elements: key and value */
 Array*
 stringSplitFirst(char *str, const char *sep)
 {
-    if (str && sep && strstr(str, sep)) {
-        char *sepStr, *key, *value;
+    int idx = -1;
+    if (str && sep && (idx = stringIndexOfStr(str, sep)) != -1) {
         Array *array = arrayNew(objectRelease);
-        sepStr = key = value = NULL;
-
-        /* Find "sep" substring */
-        sepStr = strstr(str, sep);
-        if (sepStr) {
-            int idx = 0, lenStr = strlen(str);
-            for (; idx < lenStr; idx++) {
-                if (str[idx] == *sepStr)
-                    break;
-            }
-            key = stringSub(str, 0, idx - 1);
-            value = stringSub(str, idx + strlen(sep), lenStr - 1);
-            arrayAdd(array, key);
-            arrayAdd(array, value);
-        }
+        char *key = stringSub(str, 0, idx - 1);
+        char *value = stringSub(str, idx + strlen(sep), strlen(str) - 1);
+        arrayAdd(array, key);
+        arrayAdd(array, value);
         return array;
     }
     return NULL;

@@ -6,13 +6,8 @@ it under the terms of the GNU General Public License version 3.
 See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 */
 
-#include "ulib.h"
+#include "../ulib.h"
 
-/* If the array contains elements of the same type then
- * you can pass a function pointer which will be automatically called to release
- * the element when we remove or set the element or when we release the whole array.
- * It's optional thus can accept NULL value.
-*/
 Array*
 arrayNew(void (*releaseFn)(void **))
 {
@@ -27,11 +22,6 @@ arrayNew(void (*releaseFn)(void **))
     return array;
 }
 
-/* If the array contains elements of the same type then
- * you can pass a function pointer which will be automatically called to release
- * the element when we remove or set the element or when we release the whole array.
- * It's optional thus can accept NULL value.
-*/
 Array*
 arrayNewWithAmount(int amount, void (*releaseFn)(void **))
 {
@@ -84,11 +74,6 @@ arrayAddFirst(Array *array, void *element)
     return false;
 }
 
-/*
- * We move the elements into memory decreasing the array size.
- * The element must be freed before remove operation
- * if a release function pointer is not set.
- */
 bool
 arrayRemoveAt(Array *array, int idx)
 {
@@ -110,11 +95,6 @@ arrayRemoveAt(Array *array, int idx)
     return false;
 }
 
-/*
- * We move the elements into memory decreasing the array size.
- * The element must be freed before remove operation
- * if a release function pointer is not set.
- */
 bool
 arrayRemove(Array *array, void *element)
 {
@@ -138,10 +118,6 @@ arrayRemove(Array *array, void *element)
     return false;
 }
 
-/* We only release Array->arr and and Array pointer */
-/* Each element must be freed before release operation
- * if a release function pointer is not set.
- */
 bool
 arrayRelease(Array **array)
 {
@@ -153,22 +129,13 @@ arrayRelease(Array **array)
             for (int i = 0; i < *size;)
                 arrayRemoveAt((*array), i);
         }
-        if (arr) {
-            free(arr);
-            arr = NULL;
-        }
-        free(*array);
-        *array = NULL;
+        objectRelease(&arr);
+        objectRelease(array);
         return true;
     }
     return false;
 }
 
-/*
- * We only set the element at the 'idx' index.
- * The replaced element must be freed before set operation
- * if a release function pointer is not set.
- */
 bool
 arraySet(Array *array, void *element, int idx)
 {
@@ -185,7 +152,6 @@ arraySet(Array *array, void *element, int idx)
     return false;
 }
 
-/* This function only works for the array of strings */
 bool
 arrayContainsStr(Array *array, const char *str)
 {
@@ -204,12 +170,12 @@ arrayStrCopy(Array *strArr)
     Array *ret = NULL;
     if (strArr) {
         int len = strArr->size;
-        if (len > 0)
+        if (len > 0) {
             ret = arrayNew(objectRelease);
-        for (int i = 0; i < len; i++)
-            arrayAdd(ret, stringNew(arrayGet(strArr, i)));
+            for (int i = 0; i < len; i++)
+                arrayAdd(ret, stringNew(arrayGet(strArr, i)));
+        }
     }
-
     return ret;
 }
 
