@@ -176,7 +176,8 @@ bool
 htAdd(Ht **ht, const char *key, void *value)
 {
     if (*ht && key && !stringEquals(key, "")) {
-        int idx = hash((*ht)->capacity, key);
+        int *capacity = &(*ht)->capacity;
+        int idx = hash(*capacity, key);
         HtEntry *htEntry = arrayGet((*ht)->htEntries, idx);
         if (htEntry) {
             Array *htItems = htEntry->htItems;
@@ -194,7 +195,6 @@ htAdd(Ht **ht, const char *key, void *value)
         arrayAdd(htEntry->htItems, htItemNew(*ht, key, value));
         (*ht)->numOfItems++;
         /* Check threshold */
-        int *capacity = &(*ht)->capacity;
         int threshold = *capacity * 3 / 4;
         if ((*ht)->numOfItems >= threshold)
             htResize(ht, *capacity * 2, (*ht)->releaseFn);
@@ -207,7 +207,8 @@ bool
 htRemove(Ht **ht, const char *key)
 {
     if (*ht && key && !stringEquals(key, "")) {
-        int idx = hash((*ht)->capacity, key);
+        int *capacity = &(*ht)->capacity;
+        int idx = hash(*capacity, key);
         Array *htEntries = (*ht)->htEntries;
         HtEntry *htEntry = arrayGet(htEntries, idx);
         if (htEntry) {
@@ -222,7 +223,6 @@ htRemove(Ht **ht, const char *key)
                         arrayRemove(*htItems, htItem);
                     (*ht)->numOfItems--;
                     /* check threshold */
-                    int *capacity = &(*ht)->capacity;
                     if (*capacity > (*ht)->initialCapacity) {
                         int threshold = *capacity / 4;
                         if ((*ht)->numOfItems <= threshold)

@@ -44,16 +44,16 @@ int main()
 //        printf("Ciccio key is not present!\n");
 
     // test remove and resize
-//    if (htRemove(&ht, "Luigi"))
-//        printf("Luigi removed!\n");
-//    if (htRemove(&ht, "Domenico"))
-//        printf("Domenico removed!\n");
-//    if (htRemove(&ht, "Domenico1"))
-//        printf("Domenico1 removed!\n");
-//    if (htRemove(&ht, "Domenico2"))
-//        printf("Domenico2 removed!\n");
-//    if (htRemove(&ht, "Francesco"))
-//        printf("Francesco removed!\n");
+    if (htRemove(&ht, "Luigi"))
+        printf("Luigi removed!\n");
+    if (htRemove(&ht, "Domenico"))
+        printf("Domenico removed!\n");
+    if (htRemove(&ht, "Domenico1"))
+        printf("Domenico1 removed!\n");
+    if (htRemove(&ht, "Domenico2"))
+        printf("Domenico2 removed!\n");
+    if (htRemove(&ht, "Francesco"))
+        printf("Francesco removed!\n");
 //    if (htRemove(&ht, "Marianeve"))
 //        printf("Marianeve removed!\n");
 //    if (htRemove(&ht, "Michele"))

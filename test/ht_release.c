@@ -65,13 +65,13 @@ int main()
         printf("Ciccio key is not present!\n");
 
 //    // test remove and resize
-//    for (int i = 0; i < 1485; i++) {
-//        char key[50] = {0};
-//        sprintf(key, "Domenico%d", i);
-//        if (htRemove(&ht, key)) {
-//             printf("%s removed!\n", key);
-//        }
-//    }
+    for (int i = 0; i < 1485; i++) {
+        char key[50] = {0};
+        sprintf(key, "Domenico%d", i);
+        if (htRemove(&ht, key)) {
+             printf("%s removed!\n", key);
+        }
+    }
 
 //    if (htRemove(&ht, "Luigi"))
 //        printf("Luigi removed!\n");
