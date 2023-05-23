@@ -71,14 +71,15 @@ typedef struct {
 } Time;
 
 /** @struct Ht
- *  @brief This structure represents a dynamic hash table.
+ *  @brief This structure represents a dynamic hash table with seaparate chaining.
  *  @brief <b>Key addition management</b>.<br>
- *  When the hash table keys will achieve the 3/4 of the hash table capacity (load factor 0.75),<br>
- *  its size will grow with the double of the previous capacity to prevent<br>
- *  the collisions as much as possible.<br><br>
+ *  When the keys will achieve the 3/4 of the hash table capacity (<i>load factor 0.75</i>),<br>
+ *  the latter will grow with the double of the previous capacity making a new keys rehashing<br>
+ *  to prevent the collisions as much as possible.<br><br>
  *  <b>Key remotion management</b>.<br>
- *  When the hash table keys will achieve the 1/4 of the hash table capacity (load factor 0.25),<br>
- *  its size will be the half of the previous size to improve memory usage.<br>
+ *  When the keys will achieve the 1/4 of the hash table capacity (<i>load factor 0.25</i>),<br>
+ *  the latter will be the half of the previous size making a new keys rehashing<br>
+ *  to optimize memory usage.<br>
  *  The current capacity will be never less than the initial capacity.
  *  @var Ht::initialCapacity
  *  It represents the initial hash table capacity.
