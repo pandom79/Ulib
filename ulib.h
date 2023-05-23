@@ -6,6 +6,7 @@
  * <ul>
  * <li>string</li>
  * <li>array</li>
+ * <li>hash table</li>
  * <li>date and time</li>
  * </ul>
  *
@@ -68,6 +69,59 @@ typedef struct {
     long *durationSec;
     long *durationMillisec;
 } Time;
+
+/** @struct Ht
+ *  @brief This structure represents a dynamic hash table.
+ *  @brief <b>Key addition management</b>.<br>
+ *  When the hash table keys will achieve the 3/4 of the hash table capacity (load factor 0.75),<br>
+ *  its size will grow with the double of the previous capacity to prevent<br>
+ *  the collisions as much as possible.<br><br>
+ *  <b>Key remotion management</b>.<br>
+ *  When the hash table keys will achieve the 1/4 of the hash table capacity (load factor 0.25),<br>
+ *  its size will be the half of the previous size to improve memory usage.<br>
+ *  The current capacity will be never less than the initial capacity.
+ *  @var Ht::initialCapacity
+ *  It represents the initial hash table capacity.
+ *  @var Ht::capacity
+ *  It represents the hast table capacity.
+ *  @var Ht::numOfItems
+ *  It represents the number of the hast table items.
+ *  @var Ht::htEntries
+ *  It represents an array of HtEntry structure.
+ *  @var Ht::releaseFn
+ *  It represents a generic pointer to release function.
+ */
+typedef struct {
+    int initialCapacity;
+    int capacity;
+    int numOfItems;
+    Array *htEntries;
+    void (*releaseFn)(void **);
+} Ht;
+
+/** @struct HtEntry
+ *  @brief This structure represents an hash entry which is an array of HtItem structure.
+ *  @var HtEntry::htItems
+ *  It represents the hash table items array.
+ */
+typedef struct {
+    Array *htItems;
+} HtEntry;
+
+/** @struct HtItem
+ *  @brief This structure represents an hash item.
+ *  @var HtItem::key
+ *  It represents the hash item key.
+ *  @var HtItem::value
+ *  It represents the hash item value.
+ *  @var HtItem::releaseFn
+ *  It represents a generic pointer to release function.
+ */
+typedef struct {
+    char *key;
+    void *value;
+    void (*releaseFn)(void **);
+} HtItem;
 
 // STRING
 
@@ -405,7 +459,6 @@ Array* stringSplitFirst(char *str, const char *token);
  */
 char* stringGetFileSize(off_t size);
 
-
 // ARRAY
 
 /**
@@ -476,8 +529,6 @@ bool arrayRelease(Array **arr);
 
 /**
  * Return true if the 'element' is set into 'arr' array at the 'idx' position, false otherwise.<br>
- * The replaced element should be freed before run this operation<br>
- * if a release function pointer is not set.
  * @param[in] arr
  * @param[in] element
  * @param[in] idx
@@ -568,5 +619,76 @@ char* stringGetTimeStamp(Time *time, bool hasMillisec, const char *format);
  * @return char*
  */
 char* stringGetDiffTime(Time *timeEnd, Time *timeStart);
+
+// HASHTABLE
+
+/**
+ * Return an hashtable.<br>
+ * If the hash table contains elements of the same type then<br>
+ * you can pass a function pointer which will be automatically called<br>
+ * when we remove or set the element or when we release the whole hash table.<br>
+ * It's optional thus can accept NULL value.<br>
+ * It must freed by htRelease() function.<br>
+ * About the initial capacity, it is highly recommended set a number<br>
+ * which must not represent a power of 2 to avoid the collisions as much as possible.<br>
+ * A prime number is preferable.<br>
+ * @param[in] initialCapacity
+ * @param[in] releaseFn
+ * @return Ht
+ */
+Ht* htNew(int initialCapacity, void (*releaseFn)(void **));
+
+/**
+ * Return true if the 'ht' hash table is freed, false otherwise.<br>
+ * If the hash table contains a release function pointer then <br>
+ * will be freed the elements inside as well.<br>
+ * @param[in] ht
+ * @return true/false
+ */
+bool htRelease(Ht **ht);
+
+/**
+ * Return the HtItem structure if the 'key' exists, NULL otherwise.<br>
+ * @param[in] ht
+ * @param[in] key
+ * @return HtItem
+ */
+HtItem* htGet(Ht *ht, const char *key);
+
+/**
+ * Return an array of HtItem structure.<br>
+ * It must freed by arrayRelease() function.<br>
+ * @param[in] ht
+ * @return Array
+ */
+Array* htGetAll(Ht *ht);
+
+/**
+ * Return true if a generic 'value' pointer is added
+ * to the 'ht' hash table with 'key' key, false otherwise.<br>
+ * Null, empty or duplicate keys are not allowed.<br>
+ * @param[in] ht
+ * @param[in] key
+ * @param[in] value
+ * @return true/false
+ */
+bool htAdd(Ht **ht, const char *key, void *value);
+
+/**
+ * Return true if a 'key' key is removed from 'ht' hash table, false otherwise.<br>
+ * @param[in] ht
+ * @param[in] key
+ * @return true/false
+ */
+bool htRemove(Ht **ht, const char *key);
+
+/**
+ * Return true if 'value' element is set into 'ht' hash table with 'key' key, false otherwise.<br>
+ * @param[in] ht
+ * @param[in] key
+ * @param[in] value
+ * @return true/false
+ */
+bool htSet(Ht **ht, const char *key, void *value);
 
 #endif // ULIB_H

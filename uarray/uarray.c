@@ -139,7 +139,7 @@ arrayRelease(Array **array)
 bool
 arraySet(Array *array, void *element, int idx)
 {
-    if (array && element && idx < array->size) {
+    if (array && idx < array->size) {
         void **arr = array->arr;
         void (*releaseFn)(void **) = array->releaseFn;
         if (releaseFn)
