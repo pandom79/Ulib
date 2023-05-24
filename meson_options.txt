@@ -7,3 +7,4 @@
 option('DOC_PATH', type: 'string', description: 'The documentation path')
 option('DOXY_HTML', type: 'boolean', value: true)
 option('DOXY_LATEX', type: 'boolean', value: true)
+option('NO_TEST', type: 'boolean', value: true)

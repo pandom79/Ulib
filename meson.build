@@ -3,17 +3,20 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '3.0.2', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '4.0.0', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '3.0.2'
-so_ver = '3'
+ver = '4.0.0'
+so_ver = '4'
 
 # Get paths
 prefix = get_option('prefix')
 datadir = get_option('datadir')
 build_root = meson.global_build_root()
+
+# Get test option
+no_test = get_option('NO_TEST')
 
 # Get doxygen options
 doxy_latex = get_option('DOXY_LATEX')
@@ -48,9 +51,15 @@ if doxy_html == true or doxy_latex == true
 endif
 
 # Library
-ulib = library(prj_name, 'ustring/ustring.c', 'uarray/uarray.c', 'udatetime/udatetime.c',
-               version: ver, soversion: so_ver,
-               install: true, dependencies: math_dep
+ulib = library(prj_name,
+               'ustring/ustring.c',
+               'uarray/uarray.c',
+               'udatetime/udatetime.c',
+               'uhashtable/uhashtable.c',
+               version: ver,
+               soversion: so_ver,
+               install: true,
+               dependencies: math_dep
               )
 
 # Generate pc file
@@ -76,17 +85,25 @@ if (doxy_latex == true)
 endif
 
 # Test
-test_string_new = executable('test_string_new', 'test/string_new.c', link_with: ulib)
-test_string_append = executable('test_string_append', 'test/string_append.c', link_with: ulib)
-test_string_equals = executable('test_string_equals', 'test/string_equals.c', link_with: ulib)
-test_string_split = executable('test_string_split', 'test/string_split.c', link_with: ulib)
-test_array_str_copy = executable('test_array_str_copy', 'test/array_str_copy.c', link_with: ulib)
-test_array_str_contains = executable('test_array_str_contains', 'test/array_str_contains.c', link_with: ulib)
-test_array_release = executable('test_array_release', 'test/array_release.c', link_with: ulib)
-test('test_string_new', test_string_new)
-test('test_string_append', test_string_append)
-test('test_string_equals', test_string_equals)
-test('test_string_split', test_string_split)
-test('test_array_str_copy', test_array_str_copy)
-test('test_array_str_contains', test_array_str_contains)
-test('test_array_release', test_array_release)
+if (no_test == false)
+    test_string_new = executable('test_string_new', 'test/string_new.c', link_with: ulib)
+    test_string_append = executable('test_string_append', 'test/string_append.c', link_with: ulib)
+    test_string_equals = executable('test_string_equals', 'test/string_equals.c', link_with: ulib)
+    test_string_split = executable('test_string_split', 'test/string_split.c', link_with: ulib)
+    test_array_str_copy = executable('test_array_str_copy', 'test/array_str_copy.c', link_with: ulib)
+    test_array_str_contains = executable('test_array_str_contains', 'test/array_str_contains.c', link_with: ulib)
+    test_array_release = executable('test_array_release', 'test/array_release.c', link_with: ulib)
+    test_ht_release = executable('test_ht_release', 'test/ht_release.c', link_with: ulib)
+    test_ht_release_no_alloc = executable('test_ht_release_no_alloc', 'test/ht_release_no_alloc.c', link_with: ulib)
+    test_ht_get_all = executable('test_ht_get_all', 'test/ht_get_all.c', link_with: ulib)
+    test('test_string_new', test_string_new)
+    test('test_string_append', test_string_append)
+    test('test_string_equals', test_string_equals)
+    test('test_string_split', test_string_split)
+    test('test_array_str_copy', test_array_str_copy)
+    test('test_array_str_contains', test_array_str_contains)
+    test('test_array_release', test_array_release)
+    test('test_ht_release', test_ht_release)
+    test('test_ht_release_no_alloc ', test_ht_release_no_alloc)
+    test('test_ht_get_all ', test_ht_get_all)
+endif

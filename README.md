@@ -4,6 +4,7 @@ This library provides some functions to handle the following components:<br>
 <ul>
     <li>string</li>
     <li>array</li>
+    <li>hash table</li>
     <li>date and time</li>
 </ul>
 

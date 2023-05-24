@@ -118,7 +118,7 @@ arrayRemove(Array *array, void *element)
     return false;
 }
 
-bool
+void
 arrayRelease(Array **array)
 {
     if (*array) {
@@ -131,15 +131,13 @@ arrayRelease(Array **array)
         }
         objectRelease(&arr);
         objectRelease(array);
-        return true;
     }
-    return false;
 }
 
 bool
 arraySet(Array *array, void *element, int idx)
 {
-    if (array && element && idx < array->size) {
+    if (array && idx < array->size) {
         void **arr = array->arr;
         void (*releaseFn)(void **) = array->releaseFn;
         if (releaseFn)
