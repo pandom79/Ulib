@@ -6,7 +6,7 @@ it under the terms of the GNU General Public License version 3.
 See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 */
 
-#include "../ulib.h"
+#include "uhashtable.h"
 
 static int
 hash(int capacity, const char* key)
@@ -132,7 +132,7 @@ htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
     *ht = newHt;
 }
 
-HtItem*
+void*
 htGet(Ht *ht, const char *key)
 {
     if (ht && key && !stringEquals(key, "")) {
@@ -144,30 +144,11 @@ htGet(Ht *ht, const char *key)
             for (int i = 0; i < lenHtItems; i++) {
                 HtItem *htItem = arrayGet(htItems, i);
                 if (stringEquals(htItem->key, key))
-                    return htItem;
+                    return htItem->value;
             }
         }
     }
     return NULL;
-}
-
-Array*
-htGetAll(Ht *ht)
-{
-    Array *ret = arrayNew(NULL);
-    if (ht) {
-        int len = ht->capacity;
-        for (int i = 0; i < len; i++) {
-            HtEntry *htEntry = arrayGet(ht->htEntries, i);
-            if (htEntry) {
-                Array *htItems = htEntry->htItems;
-                int lenHtItems = htItems->size;
-                for (int j = 0; j < lenHtItems; j++)
-                    arrayAdd(ret, arrayGet(htItems, j));
-            }
-        }
-    }
-    return ret;
 }
 
 bool
@@ -255,4 +236,50 @@ htSet(Ht **ht, const char *key, void *value)
         }
     }
     return false;
+}
+
+HtIterator*
+htGetIterator(Ht *ht)
+{
+    if (ht) {
+        HtIterator *htIter = calloc(1, sizeof(HtIterator));
+        assert(htIter);
+        htIter->ht = ht;
+        htIter->hashIdx = 0;
+        htIter->hashItemIdx = -1;
+        return htIter;
+    }
+    return NULL;
+}
+
+void*
+htGetNext(HtIterator *htIterator)
+{
+    if (htIterator) {
+        Ht *ht = htIterator->ht;
+        int capacity = ht->capacity;
+        int *hashIdx = &htIterator->hashIdx;
+        for (; *hashIdx < capacity; (*hashIdx)++) {
+            HtEntry *htEntry = arrayGet(ht->htEntries, *hashIdx);
+            if (htEntry) {
+                Array *htItems = htEntry->htItems;
+                int *hashItemIdx = &(htIterator->hashItemIdx);
+                if (++(*hashItemIdx) < htItems->size)
+                    return ((HtItem *)arrayGet(htItems, *hashItemIdx))->value;
+                else
+                    *hashItemIdx = -1;
+            }
+        }
+    }
+    return NULL;
+}
+
+void
+htIteratorReset(Ht *ht, HtIterator *htIterator)
+{
+    if (htIterator && ht) {
+        htIterator->ht = ht;
+        htIterator->hashIdx = 0;
+        htIterator->hashItemIdx = -1;
+    }
 }

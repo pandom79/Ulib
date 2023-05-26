@@ -101,29 +101,20 @@ typedef struct {
     void (*releaseFn)(void **);
 } Ht;
 
-/** @struct HtEntry
- *  @brief This structure represents an hash entry which is an array of HtItem structure.
- *  @var HtEntry::htItems
- *  It represents the hash table items array.
+/** @struct HtIterator
+ *  @brief This structure represents a hash table iterator.
+ *  @var HtIterator::ht
+ *  It represents the associated hash table.
+ *  @var HtIterator::hashIdx
+ *  It represents the hash table key index.
+ *  @var HtIterator::hashItemIdx
+ *  It represents the hash table item index.
  */
 typedef struct {
-    Array *htItems;
-} HtEntry;
-
-/** @struct HtItem
- *  @brief This structure represents an hash item.
- *  @var HtItem::key
- *  It represents the hash item key.
- *  @var HtItem::value
- *  It represents the hash item value.
- *  @var HtItem::releaseFn
- *  It represents a generic pointer to release function.
- */
-typedef struct {
-    char *key;
-    void *value;
-    void (*releaseFn)(void **);
-} HtItem;
+    Ht *ht;
+    int hashIdx;
+    int hashItemIdx;
+} HtIterator;
 
 // STRING
 
@@ -648,20 +639,12 @@ Ht* htNew(int initialCapacity, void (*releaseFn)(void **));
 void htRelease(Ht **ht);
 
 /**
- * Return the HtItem structure if the 'key' exists, NULL otherwise.<br>
+ * Return the value of the key if the 'key' exists, NULL otherwise.<br>
  * @param[in] ht
  * @param[in] key
- * @return HtItem
+ * @return void*
  */
-HtItem* htGet(Ht *ht, const char *key);
-
-/**
- * Return an array of HtItem structure.<br>
- * It must freed by arrayRelease() function.<br>
- * @param[in] ht
- * @return Array
- */
-Array* htGetAll(Ht *ht);
+void* htGet(Ht *ht, const char *key);
 
 /**
  * Return true if a generic 'value' pointer is added
@@ -690,5 +673,27 @@ bool htRemove(Ht **ht, const char *key);
  * @return true/false
  */
 bool htSet(Ht **ht, const char *key, void *value);
+
+/**
+ * Return the hast table iterator if 'ht' hash table is not null, NULL otherwise.<br>
+ * It must be freed by objectRelease() function.<br>
+ * @param[in] ht
+ * @return HtIterator*
+ */
+HtIterator* htGetIterator(Ht *ht);
+
+/**
+ * Return the value of the next hash table key, NULL if the iterator is terminated.
+ * @param[in] htIterator
+ * @return void*
+ */
+void* htGetNext(HtIterator *htIterator);
+
+/**
+ * Reset the hash table iterator for the next iteration cycle.
+ * @param[in] ht
+ * @param[in] htIterator
+ */
+void htIteratorReset(Ht *ht, HtIterator *htIterator);
 
 #endif // ULIB_H

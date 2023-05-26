@@ -74,25 +74,20 @@ stringEndsWithStr(const char *str, const char *searchStr)
 
     int lenStr = (str ? strlen(str) : 0);
     int lenSearchStr = (searchStr ? strlen(searchStr) : 0);
-
     if (lenStr > 0 && lenSearchStr > 0 && lenSearchStr <= lenStr) {
-
         int searchStrIndex = lenSearchStr - 1;
         str += lenStr - 1;
         searchStr += lenSearchStr - 1;
-
         while (*str) {
             if (*str == *searchStr) {
                 if (searchStrIndex-- == 0)
                     return true;
-
                 str--;
                 searchStr--;
             }
             else break;
         }
     }
-
     return false;
 }
 
@@ -277,7 +272,6 @@ stringIndexOfChr(const char *str, const char c)
             while (str) {
                 if (str == p)
                     return index;
-
                 index++;
                 str++;
             }
@@ -296,7 +290,6 @@ stringIndexOfStr(const char *str, const char *c)
             while (str) {
                 if (str == p)
                     return index;
-
                 index++;
                 str++;
             }
@@ -324,12 +317,10 @@ stringLastIndexOfStr(const char *str, const char *c)
     if (str && c) {
         int lenStr = strlen(str);
         int lenC = strlen(c);
-
         int indexStr = lenStr - 1;
         int indexC = lenC - 1;
         int elements = 0;
         bool found = false;
-
         while (indexStr >= 0) {
             if (str[indexStr] == c[indexC]) {
                 found = true;
@@ -357,10 +348,8 @@ char*
 stringSub(const char *str, int startIdx, int endIdx) {
 
     char *ret = NULL;
-    int len = (str ? strlen(str) : 0);
-
-    if (str && len > 0 && startIdx >= 0 && endIdx >= 0 &&
-       endIdx < len) {
+    int len = str ? strlen(str) : 0;
+    if (str && len > 0 && startIdx >= 0 && endIdx >= 0 && endIdx < len) {
         int numElements = (endIdx - startIdx) + 1;
         if (numElements > 0) {
             ret = calloc(numElements + 1, sizeof(char));
@@ -368,7 +357,6 @@ stringSub(const char *str, int startIdx, int endIdx) {
             memmove(ret, str + startIdx, numElements * sizeof(char));
         }
     }
-
     return ret;
 }
 
@@ -409,9 +397,8 @@ stringReplaceStr(char **origin, const char *search, const char *replace)
 void
 stringReplaceAllStr(char **origin, const char *search, const char *replace)
 {
-    char *temp = NULL;
     if (*origin && replace) {
-        while ((temp = strstr(*origin, search)))
+        while (strstr(*origin, search))
             stringReplaceStr(origin, search, replace);
      }
 }
@@ -505,7 +492,6 @@ stringGetFileSize(off_t fileSize)
         char *result = (char *) calloc(20, sizeof(char));
         off_t multiplier = EXBIBYTES;
         int i;
-
         for (i = 0; i < 7; i++, multiplier /= 1024)
         {
             if (fileSize < multiplier)
@@ -514,7 +500,6 @@ stringGetFileSize(off_t fileSize)
                 sprintf(result, "%" PRIu64 "%s", fileSize / multiplier, SIZES[i]);
             else
                 sprintf(result, "%.1f%s", (float) fileSize / multiplier, SIZES[i]);
-
             stringReplaceChr(&result, '.', ',');
             return result;
         }
@@ -522,6 +507,5 @@ stringGetFileSize(off_t fileSize)
         assert(strlen(result) > 0);
         return result;
     }
-
     return NULL;
 }

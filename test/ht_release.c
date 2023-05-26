@@ -1,4 +1,4 @@
-#include "../ulib.h"
+#include "../uhashtable/uhashtable.h"
 
 bool isPowerOfTwo(int x)
 {
@@ -57,11 +57,11 @@ int main()
 //    htSet(&ht, "Domenico9", NULL);
 
     // test get
-    HtItem *htItem = htGet(ht, "Domenico608");
-    if (htItem)
-        printf("Domenico608 key is present! Value = %s\n", (char *)htItem->value);
-    htItem = htGet(ht, "Ciccio");
-    if (!htItem)
+    char *value = htGet(ht, "Domenico608");
+    if (value)
+        printf("Domenico608 key is present! Value = %s\n", value);
+    value = htGet(ht, "Ciccio");
+    if (!value)
         printf("Ciccio key is not present!\n");
 
 //    // test remove and resize
