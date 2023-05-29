@@ -415,6 +415,15 @@ bool stringEqualsIgnCase(const char *str1, const char *str2);
 bool stringEqualsIgnCaseN(const char *str1, const char *str2, size_t n);
 
 /**
+ * Return true is 'str2' string is copied into 'str1' string, false otherwise.<br>
+ * This function assumes that 'str1' string has enough space to contain 'str2' string.<br>
+ * @param[in] str1
+ * @param[in] str2
+ * @return true/false
+ */
+bool stringCopy(char *str1, const char *str2);
+
+/**
  * Free a generic 'ptr' pointer.<br>
  * It will be assigned to NULL to handle an eventual double free error.
  * @param[in] ptr

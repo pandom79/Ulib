@@ -18,7 +18,7 @@ stringNew(const char *str)
     if (str) {
         ret = calloc(strlen(str) + 1, sizeof(char));
         assert(ret);
-        assert(strcpy(ret, str));
+        assert(stringCopy(ret, str));
     }
     return ret;
 }
@@ -439,6 +439,19 @@ stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
         return false;
 }
 
+bool
+stringCopy(char *str1, const char *str2)
+{
+    if (str1 && str2) {
+        int len = strlen(str2);
+        for (int i = 0; i < len; i++)
+            str1[i] = str2[i];
+        str1[len] = '\0';
+        return true;
+    }
+    return false;
+}
+
 void
 objectRelease(void **element)
 {
@@ -503,8 +516,7 @@ stringGetFileSize(off_t fileSize)
             stringReplaceChr(&result, '.', ',');
             return result;
         }
-        strcpy(result, "0");
-        assert(strlen(result) > 0);
+        assert(stringCopy(result, "0"));
         return result;
     }
     return NULL;
