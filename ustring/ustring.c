@@ -503,8 +503,7 @@ stringGetFileSize(off_t fileSize)
             stringReplaceChr(&result, '.', ',');
             return result;
         }
-        strcpy(result, "0");
-        assert(strlen(result) > 0);
+        assert(strcpy(result, "0"));
         return result;
     }
     return NULL;

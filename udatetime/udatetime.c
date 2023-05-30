@@ -127,7 +127,6 @@ stringGetTimeStamp(Time *time, bool hasMillisec, const char *format)
         long milliSec = round(tv.tv_nsec / 1.0e6);
         char millisecStr[10] = {0};
         sprintf(millisecStr, "%lu", milliSec);
-        assert(strlen(millisecStr) > 0);
         strcat(dateTimeStr, millisecStr);
     }
 
@@ -178,19 +177,16 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
         if (day != -1 && day > 0) {
             char dayStr[10] = {0};
             sprintf(dayStr, "%dd ", day);
-            assert(strlen(dayStr) > 0);
             strcat(timeStr, dayStr);
         }
         if (hour != -1 && hour > 0) {
             char hourStr[20] = {0};
             sprintf(hourStr, "%dh ", hour);
-            assert(strlen(hourStr) > 0);
             strcat(timeStr, hourStr);
         }
         if (min != -1 && min > 0) {
             char minStr[20] = {0};
             sprintf(minStr, "%dm ", min);
-            assert(strlen(minStr) > 0);
             strcat(timeStr, minStr);
         }
         if (sec != -1 && (sec > 0 || diffMillisec > 0)) {
@@ -199,7 +195,6 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
                 sprintf(secStr, "%d.%lds ", sec, diffMillisec);
             else
                 sprintf(secStr, "%ds ", sec);
-            assert(strlen(secStr) > 0);
             strcat(timeStr, secStr);
         }
     }
@@ -208,6 +203,6 @@ stringGetDiffTime(Time *timeEnd, Time *timeStart)
         sprintf(timeStr, diffMillisec == 0 ? "%lds" : "0.%lds", diffMillisec);
     }
 
-    assert(strlen(timeStr) > 0);
+    assert(!stringEquals(timeStr, ""));
     return stringTrim(stringNew(timeStr), NULL);
 }

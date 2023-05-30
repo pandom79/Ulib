@@ -436,7 +436,7 @@ Array* stringSplit(char *str, const char *token, bool alloc);
 /**
  * Return an array of two elements splitting once 'str' string using 'token' string as a delimiter.<br>
  * Return NULL if the 'token' string is not found.<br>
- * It must freed by arrayRelease() function..
+ * It must freed by arrayRelease() function.
  * @param[in] str
  * @param[in] token
  * @return Array
