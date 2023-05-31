@@ -128,13 +128,22 @@ typedef struct {
 char* stringNew(const char *src);
 
 /**
- * Return true if a copy of 'src' string is set into 's' string, false otherwise<br>
+ * Return true if a copy of 'src' string is set into 's' string, false otherwise.<br>
  * If 's' pointer was already allocated then it will be freed by objectRelease() before set the copy.
  * @param[in] s
  * @param[in] src
  * @return true/false
  */
 bool stringSet(char **s, const char *src);
+
+/**
+ * Return true if 'src' string is copied into 's' string, false otherwise.<br>
+ * This function assumes that 's' string has enough space to contain 'src' string.<br>
+ * @param[in] s
+ * @param[in] src
+ * @return true/false
+ */
+bool stringCopy(char *s, const char *src);
 
 /**
  * Return an immutable 'str' string.<br>

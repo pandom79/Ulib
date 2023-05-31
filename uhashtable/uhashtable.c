@@ -263,7 +263,7 @@ htGetNext(HtIterator *htIterator)
             HtEntry *htEntry = arrayGet(ht->htEntries, *hashIdx);
             if (htEntry) {
                 Array *htItems = htEntry->htItems;
-                int *hashItemIdx = &(htIterator->hashItemIdx);
+                int *hashItemIdx = &htIterator->hashItemIdx;
                 if (++(*hashItemIdx) < htItems->size)
                     return ((HtItem *)arrayGet(htItems, *hashItemIdx))->value;
                 else

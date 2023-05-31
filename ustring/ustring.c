@@ -18,7 +18,7 @@ stringNew(const char *str)
     if (str) {
         ret = calloc(strlen(str) + 1, sizeof(char));
         assert(ret);
-        assert(strcpy(ret, str));
+        assert(stringCopy(ret, str));
     }
     return ret;
 }
@@ -31,6 +31,17 @@ stringSet(char **str, const char *value)
             objectRelease(str);
         *str = stringNew(value);
         return true;
+    }
+    return false;
+}
+
+bool
+stringCopy(char *s, const char *src)
+{
+    if (s && src) {
+        memset(s, 0, strlen(s));
+        if (memmove(s, src, strlen(src)))
+            return true;
     }
     return false;
 }
@@ -503,7 +514,7 @@ stringGetFileSize(off_t fileSize)
             stringReplaceChr(&result, '.', ',');
             return result;
         }
-        assert(strcpy(result, "0"));
+        assert(stringCopy(result, "0B"));
         return result;
     }
     return NULL;

@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '4.0.1', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '4.0.2', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '4.0.1'
+ver = '4.0.2'
 so_ver = '4'
 
 # Get paths
@@ -90,6 +90,8 @@ if (no_test == false)
     test_string_append = executable('test_string_append', 'test/string_append.c', link_with: ulib)
     test_string_equals = executable('test_string_equals', 'test/string_equals.c', link_with: ulib)
     test_string_split = executable('test_string_split', 'test/string_split.c', link_with: ulib)
+    test_string_copy = executable('test_string_copy', 'test/string_copy.c', link_with: ulib)
+    test_string_file_size = executable('test_string_file_size', 'test/string_file_size.c', link_with: ulib)
     test_array_str_copy = executable('test_array_str_copy', 'test/array_str_copy.c', link_with: ulib)
     test_array_str_contains = executable('test_array_str_contains', 'test/array_str_contains.c', link_with: ulib)
     test_array_release = executable('test_array_release', 'test/array_release.c', link_with: ulib)
@@ -100,6 +102,8 @@ if (no_test == false)
     test('test_string_append', test_string_append)
     test('test_string_equals', test_string_equals)
     test('test_string_split', test_string_split)
+    test('test_string_copy', test_string_copy)
+    test('test_string_file_size', test_string_file_size)
     test('test_array_str_copy', test_array_str_copy)
     test('test_array_str_contains', test_array_str_contains)
     test('test_array_release', test_array_release)
