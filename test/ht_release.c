@@ -98,7 +98,7 @@ int main()
 
     htEntries = ht->htEntries;
     int totCollisions = 0;
-    int maxCollisionsForItem = 0;
+    int maxCollisionsForEntry = 0;
     for (int i = 0; i < htEntries->size; i++) {
         printf("After Hash %d\n", i);
         HtEntry *htEntry = arrayGet(htEntries, i);
@@ -107,8 +107,8 @@ int main()
             int lenHtItems = htItems->size;
             if (lenHtItems > 0) {
                 totCollisions += lenHtItems -1;
-                if (lenHtItems - 1 > maxCollisionsForItem)
-                    maxCollisionsForItem = lenHtItems - 1;
+                if (lenHtItems - 1 > maxCollisionsForEntry)
+                    maxCollisionsForEntry = lenHtItems - 1;
             }
             for (int j = 0; j < lenHtItems; j++) {
                 HtItem *htItem = arrayGet(htItems, j);
@@ -120,7 +120,7 @@ int main()
     printf("\nSUMMARY\n");
     printf("Capacity = %d\n", ht->capacity);
     printf("Elements = %d\n", ht->numOfItems);
-    printf("Max collisions for item = %d\n", maxCollisionsForItem);
+    printf("Max collisions for entry = %d\n", maxCollisionsForEntry);
     printf("Total collisions = %d\n", totCollisions);
 
     htRelease(&ht);

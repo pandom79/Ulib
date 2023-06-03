@@ -80,7 +80,7 @@ typedef struct {
  *  When the keys will achieve the 1/4 of the hash table capacity (<i>load factor 0.25</i>),<br>
  *  the latter will be the half of the previous size<br>
  *  to optimize memory usage.<br><br>
- *  For both, a new key rehashing will be performed.<br>
+ *  For both, a key rehashing will be performed.<br>
  *  The current capacity will be never less than the initial capacity.
  *  @var Ht::initialCapacity
  *  It represents the initial hash table capacity.
