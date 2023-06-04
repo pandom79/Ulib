@@ -158,7 +158,7 @@ stringAppendStr(char **a, const char *b)
             int lenB = strlen(b);
             *a = realloc(*a, (lenA + lenB + 1) * sizeof(char));
             assert(*a);
-            memmove(*a + lenA, b, lenB * sizeof(char));
+            memmove(*a + lenA, b, lenB);
             *(*a + lenA + lenB) = '\0';
         }
         return true;
@@ -360,12 +360,12 @@ stringSub(const char *str, int startIdx, int endIdx) {
 
     char *ret = NULL;
     int len = str ? strlen(str) : 0;
-    if (str && len > 0 && startIdx >= 0 && endIdx >= 0 && endIdx < len) {
+    if (len > 0 && startIdx >= 0 && endIdx >= 0 && endIdx < len) {
         int numElements = (endIdx - startIdx) + 1;
         if (numElements > 0) {
             ret = calloc(numElements + 1, sizeof(char));
             assert(ret);
-            memmove(ret, str + startIdx, numElements * sizeof(char));
+            memmove(ret, str + startIdx, numElements);
         }
     }
     return ret;
@@ -386,7 +386,7 @@ stringReplaceAllChr(char **str, const char a, const char b)
 {
     if (*str) {
         char *temp = NULL;
-        while ((temp = strchr(*str, a)) != NULL)
+        while ((temp = strchr(*str, a)))
             *temp = b;
     }
 }
