@@ -220,17 +220,20 @@ htSet(Ht **ht, const char *key, void *value)
 {
     if (*ht && key && !stringEquals(key, "")) {
         int idx = hash((*ht)->capacity, key);
-        Array **htItems = &((HtEntry *)arrayGet((*ht)->htEntries, idx))->htItems;
-        if (*htItems) {
-            int lenHtItems = (*htItems)->size;
-            for (int i = 0; i < lenHtItems; i++) {
-                HtItem *htItem = arrayGet(*htItems, i);
-                if (stringEquals(htItem->key, key)) {
-                    void (*releaseFn)(void **) = htItem->releaseFn;
-                    if (releaseFn)
-                        (*releaseFn)(&htItem->value);
-                    htItem->value = value;
-                    return true;
+        HtEntry *htEntry = (HtEntry *)arrayGet((*ht)->htEntries, idx);
+        if (htEntry) {
+            Array **htItems = &htEntry->htItems;
+            if (*htItems) {
+                int lenHtItems = (*htItems)->size;
+                for (int i = 0; i < lenHtItems; i++) {
+                    HtItem *htItem = arrayGet(*htItems, i);
+                    if (stringEquals(htItem->key, key)) {
+                        void (*releaseFn)(void **) = htItem->releaseFn;
+                        if (releaseFn)
+                            (*releaseFn)(&htItem->value);
+                        htItem->value = value;
+                        return true;
+                    }
                 }
             }
         }
