@@ -34,6 +34,7 @@
 #include <math.h>
 #include <sys/types.h>
 #include <inttypes.h>
+#include <stdarg.h>
 
 /* TYPES */
 
@@ -115,6 +116,42 @@ typedef struct {
     int hashIdx;
     int hashItemIdx;
 } HtIterator;
+
+// PARSER SECTIONS
+typedef struct SectionName {
+    int sectionNameEnum;
+    const char *desc;
+} SectionName;
+
+typedef struct SectionData {
+    SectionName sectionName;
+    bool repeatable;
+    bool required;
+    int sectionCount;
+} SectionData;
+
+extern int PARSER_SECTIONS_ITEMS_LEN;
+extern SectionData *PARSER_SECTIONS_ITEMS;
+
+// PARSER PROPERTIES
+typedef struct PropertyName {
+    int propertyNameEnum;
+    const char *desc;
+} PropertyName;
+
+typedef struct PropertyData {
+    int idxSectionItem;
+    PropertyName propertyName;
+    bool repeatable;
+    bool required;
+    bool numeric;
+    int propertyCount;
+    const char **acceptedValues;
+    Array *notDupValues;
+} PropertyData;
+
+extern int PARSER_PROPERTIES_ITEMS_LEN;
+extern PropertyData *PARSER_PROPERTIES_ITEMS;
 
 // STRING
 
@@ -704,5 +741,11 @@ void* htGetNext(HtIterator *htIterator);
  * @param[in] htIterator
  */
 void htIteratorReset(Ht *ht, HtIterator *htIterator);
+
+// PARSER
+void parserInit();
+int parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData);
+char* getMsg(int numLine, const char *message, ...);
+void parserEnd(Array **errors, bool isAggregate);
 
 #endif // ULIB_H

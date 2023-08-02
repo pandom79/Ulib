@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '4.0.3', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '4.1.0', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '4.0.3'
+ver = '4.1.0'
 so_ver = '4'
 
 # Get paths
@@ -56,6 +56,9 @@ ulib = library(prj_name,
                'uarray/uarray.c',
                'udatetime/udatetime.c',
                'uhashtable/uhashtable.c',
+               'uhashtable/uhashtable.h',
+               'uparser/uparser.c',
+               'uparser/uparser.h',
                version: ver,
                soversion: so_ver,
                install: true,
