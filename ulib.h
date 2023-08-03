@@ -118,13 +118,13 @@ typedef struct {
 } HtIterator;
 
 // PARSER SECTIONS
-typedef struct SectionName {
-    int sectionNameEnum;
+typedef struct Section {
+    int id;
     const char *desc;
-} SectionName;
+} Section;
 
 typedef struct SectionData {
-    SectionName sectionName;
+    Section section;
     bool repeatable;
     bool required;
     int sectionCount;
@@ -134,14 +134,14 @@ extern int PARSER_SECTIONS_ITEMS_LEN;
 extern SectionData *PARSER_SECTIONS_ITEMS;
 
 // PARSER PROPERTIES
-typedef struct PropertyName {
-    int propertyNameEnum;
+typedef struct Property {
+    int id;
     const char *desc;
-} PropertyName;
+} Property;
 
 typedef struct PropertyData {
-    int idxSectionItem;
-    PropertyName propertyName;
+    int idSection;
+    Property property;
     bool repeatable;
     bool required;
     bool numeric;
@@ -747,5 +747,6 @@ void parserInit();
 int parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData);
 char* getMsg(int numLine, const char *message, ...);
 void parserEnd(Array **errors, bool isAggregate);
+bool isValidNumber(const char *value, bool zeroIncluded);
 
 #endif // ULIB_H

@@ -33,6 +33,5 @@ typedef struct {
 
 /* Functions */
 char* checkKeyVal(char *key, char *value, int numLine, PropertyData **);
-bool isValidNumber(const char *, bool);
 
 #endif // UPARSER_H

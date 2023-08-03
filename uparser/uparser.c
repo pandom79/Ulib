@@ -60,7 +60,7 @@ parserEnd(Array **errors, bool isAggregate)
         sectionData = &PARSER_SECTIONS_ITEMS[i];
         if (sectionData->required && sectionData->sectionCount == 0) {
             arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
-                                       sectionData->sectionName.desc, "section"));
+                                       sectionData->section.desc, "section"));
             if (!isAggregate)
                 return;
             else
@@ -72,7 +72,7 @@ parserEnd(Array **errors, bool isAggregate)
         propertyData = &PARSER_PROPERTIES_ITEMS[i];
         if (propertyData->required && propertyData->propertyCount == 0) {
             arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
-                                       propertyData->propertyName.desc, "property"));
+                                       propertyData->property.desc, "property"));
             if (!isAggregate)
                 return;
             else
@@ -173,7 +173,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
     if (!value) {
         for (int i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
             currentSectionData =  &PARSER_SECTIONS_ITEMS[i];
-            if (stringEquals(key, currentSectionData->sectionName.desc)) {
+            if (stringEquals(key, currentSectionData->section.desc)) {
                 /* Setting the current section */
                 SECTION_CURRENT = i;
                 /* Incrementing the counter */
@@ -187,7 +187,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
         /* Check property name */
         for (int i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
             currentPropertyData = &PARSER_PROPERTIES_ITEMS[i];
-            if (stringEquals(key, currentPropertyData->propertyName.desc)) {
+            if (stringEquals(key, currentPropertyData->property.desc)) {
                 *propertyData = currentPropertyData;
                 /* Incrementing the counter */
                 currentPropertyData->propertyCount++;
@@ -220,9 +220,9 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
         /* If the property has been configured with "IdSection = NO_SECTION = -1"
          * means that it has not section
          */
-        if (SECTION_CURRENT != NO_SECTION && SECTION_CURRENT != currentPropertyData->idxSectionItem) {
+        if (SECTION_CURRENT != NO_SECTION && SECTION_CURRENT != currentPropertyData->idSection) {
             error = getMsg(numLine, ERRORS_ITEMS[PROPERTY_SECTION_ERR].desc,
-                             PARSER_SECTIONS_ITEMS[SECTION_CURRENT].sectionName.desc,
+                             PARSER_SECTIONS_ITEMS[SECTION_CURRENT].section.desc,
                              key);
             return error;
         }
@@ -257,7 +257,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
                     }
                     if (!valueFound) {
                         error = getMsg(numLine, ERRORS_ITEMS[ACCEPTED_VALUE_ERR].desc,
-                                         value, currentPropertyData->propertyName.desc);
+                                         value, currentPropertyData->property.desc);
                         return error;
                     }
                 }
@@ -272,7 +272,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
                     }
                     if (isDuplicate) {
                         error = getMsg(numLine, ERRORS_ITEMS[DUPLICATE_VALUE_ERR].desc,
-                                         currentPropertyData->propertyName.desc);
+                                         currentPropertyData->property.desc);
                     }
                 }
             }
