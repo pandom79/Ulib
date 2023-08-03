@@ -34,7 +34,7 @@ parserInit()
     /* Reset all */
     int i;
     for (i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
-        PARSER_SECTIONS_ITEMS[i].sectionCount = 0;
+        PARSER_SECTIONS_ITEMS[i].count = 0;
     }
     SECTION_CURRENT = NO_SECTION;
     for (i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
@@ -58,7 +58,7 @@ parserEnd(Array **errors, bool isAggregate)
     /* Check required section */
     for (i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
         sectionData = &PARSER_SECTIONS_ITEMS[i];
-        if (sectionData->required && sectionData->sectionCount == 0) {
+        if (sectionData->required && sectionData->count == 0) {
             arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
                                        sectionData->section.desc, "section"));
             if (!isAggregate)
@@ -177,7 +177,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
                 /* Setting the current section */
                 SECTION_CURRENT = i;
                 /* Incrementing the counter */
-                currentSectionData->sectionCount++;
+                currentSectionData->count++;
                 found = true;
                 break;
             }
@@ -209,7 +209,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
 
     /* Check the occurrences number about the section */
     if (currentSectionData) {
-        if (!currentSectionData->repeatable && currentSectionData->sectionCount > 1) {
+        if (!currentSectionData->repeatable && currentSectionData->count > 1) {
             error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc,
                              key, "section");
             return error;

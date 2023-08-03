@@ -118,28 +118,80 @@ typedef struct {
 } HtIterator;
 
 // PARSER SECTIONS
-typedef struct Section {
+/** @struct Section
+ *  @brief This structure represents a file section.
+ *  @var Section::id
+ *  It represents the section id.
+ *  @var Section::desc
+ *  It represents the section description.
+ */
+typedef struct {
     int id;
     const char *desc;
 } Section;
 
-typedef struct SectionData {
+/** @struct SectionData
+ *  @brief This structure represents the section configuration.
+ *  @var SectionData::section
+ *  This member contains the section id and description.
+ *  @var SectionData::repeatable
+ *  This member allows to set the section repeatability.
+ *  @var SectionData::required
+ *  This member allows to set the section mandatory.
+ *  @var SectionData::count
+ *  This member is used to count the sections.
+ */
+typedef struct {
     Section section;
     bool repeatable;
     bool required;
-    int sectionCount;
+    int count;
 } SectionData;
 
+/**
+ * @brief This variable have to contain the sections number configured from translation unit.
+ */
 extern int PARSER_SECTIONS_ITEMS_LEN;
+
+/**
+ * @brief This variable have to contain the configured sections from translation unit.
+ */
 extern SectionData *PARSER_SECTIONS_ITEMS;
 
 // PARSER PROPERTIES
-typedef struct Property {
+
+/** @struct Property
+ *  @brief This structure represents a file property.
+ *  @var Property::id
+ *  It represents the property id.
+ *  @var Property::desc
+ *  It represents the property description.
+ */
+typedef struct {
     int id;
     const char *desc;
 } Property;
 
-typedef struct PropertyData {
+/** @struct PropertyData
+ *  @brief This structure represents the property configuration.
+ *  @var PropertyData::idSection
+ *  This member contains the section id.
+ *  @var PropertyData::property
+ *  This member contains the property id and description.
+ *  @var PropertyData::repeatable
+ *  This member allows to set the property repeatability.
+ *  @var PropertyData::required
+ *  This member allows to set the property mandatory.
+ *  @var PropertyData::numeric
+ *  This member allows to set the numeric type for the property.
+ *  @var PropertyData::propertyCount
+ *  This member is used to count the properties.
+ *  @var PropertyData::acceptedValues
+ *  This member contains the accepted values for the property.
+ *  @var PropertyData::notDupValues
+ *  This member contains the pointers to structures which have not to contain duplicate values.
+ */
+typedef struct {
     int idSection;
     Property property;
     bool repeatable;
@@ -150,7 +202,14 @@ typedef struct PropertyData {
     Array *notDupValues;
 } PropertyData;
 
+/**
+ * @brief This variable have to contain the properties number configured from translation unit.
+ */
 extern int PARSER_PROPERTIES_ITEMS_LEN;
+
+/**
+ * @brief This variable have to contain the configured properties from translation unit.
+ */
 extern PropertyData *PARSER_PROPERTIES_ITEMS;
 
 // STRING
@@ -743,10 +802,44 @@ void* htGetNext(HtIterator *htIterator);
 void htIteratorReset(Ht *ht, HtIterator *htIterator);
 
 // PARSER
+
+/**
+ * Initialize the parser counters.
+ */
 void parserInit();
+
+/**
+ * Parse the file line.
+ * @param[in] line
+ * @param[in] numLine
+ * @param[in] keyVal
+ * @param[in] propertyData
+ * @return integer
+ */
 int parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData);
+
+/**
+ * Get the message replacing the arguments into it.
+ * @param[in] numLine
+ * @param[in] message
+ * @param[in] ...
+ * @return char*
+ */
 char* getMsg(int numLine, const char *message, ...);
+
+/**
+ * Finalize the parser activity checking the required data.
+ * @param[in] errors
+ * @param[in] isAggregate
+ */
 void parserEnd(Array **errors, bool isAggregate);
+
+/**
+ * Return a boolean value which represents the check result.
+ * @param[in] value
+ * @param[in] zeroIncluded
+ * @return true/false
+ */
 bool isValidNumber(const char *value, bool zeroIncluded);
 
 #endif // ULIB_H
