@@ -44,6 +44,28 @@ parserInit()
     }
 }
 
+int
+parserCheckCurSec(Array **errors, bool isAggregate)
+{
+    int rv = 0;
+    if (PARSER_SECTIONS_ITEMS[SECTION_CURRENT].count > 1) {
+        PropertyData *propertyData = NULL;
+        for (int i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
+            propertyData = &PARSER_PROPERTIES_ITEMS[i];
+            if (propertyData->idSection == SECTION_CURRENT) {
+                if (propertyData->required && propertyData->propertyCount == 0) {
+                    arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
+                                      propertyData->property.desc, "property"));
+                    if (!isAggregate)
+                        rv = 1;
+                }
+                propertyData->propertyCount = 0;
+            }
+        }
+    }
+    return rv;
+}
+
 void
 parserEnd(Array **errors, bool isAggregate)
 {

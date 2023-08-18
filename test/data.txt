@@ -1,0 +1,28 @@
+[Person]
+Name = Domenico
+Surname = Panella
+Age = 78
+
+[Event]
+Type = Soccer
+City = New York
+Num_people = 56
+
+[Person]
+Name = Antonio
+Surname = Esposito
+Age = 34
+
+[Person]
+Name = John
+Surname = Smith
+Age = 12
+
+[Event]
+Type = Football
+City = Chicago
+Num_people = 234
+
+
+
+

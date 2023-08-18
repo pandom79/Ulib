@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '4.1.0', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '4.1.1', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '4.1.0'
+ver = '4.1.1'
 so_ver = '4'
 
 # Get paths
@@ -102,6 +102,7 @@ if (no_test == false)
     test_ht_release = executable('test_ht_release', 'test/ht_release.c', link_with: ulib)
     test_ht_release_no_alloc = executable('test_ht_release_no_alloc', 'test/ht_release_no_alloc.c', link_with: ulib)
     test_ht_get_iterator = executable('test_ht_get_iterator', 'test/ht_get_iterator.c', link_with: ulib)
+    test_parse_file = executable('test_parse_file', 'test/parse_file.c', link_with: ulib)
     test('test_string_new', test_string_new)
     test('test_string_append', test_string_append)
     test('test_string_equals', test_string_equals)
@@ -115,4 +116,5 @@ if (no_test == false)
     test('test_ht_release', test_ht_release)
     test('test_ht_release_no_alloc ', test_ht_release_no_alloc)
     test('test_ht_get_iterator', test_ht_get_iterator)
+    test('test_parse_file', test_parse_file)
 endif

@@ -828,6 +828,14 @@ int parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyDa
 char* getMsg(int numLine, const char *message, ...);
 
 /**
+ * Check the required data for the current section when the latter is configured as repeatable.
+ * @param[in] errors
+ * @param[in] isAggregate
+ * @return integer
+ */
+int parserCheckCurSec(Array **errors, bool isAggregate);
+
+/**
  * Finalize the parser activity checking the required data.
  * @param[in] errors
  * @param[in] isAggregate
