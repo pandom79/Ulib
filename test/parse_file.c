@@ -102,11 +102,8 @@ int main()
     Person *person = NULL;
     Event *event = NULL;
 
-    PARSER_SECTIONS_ITEMS_LEN = SECTIONS_ITEMS_LEN;
-    PARSER_SECTIONS_ITEMS = SECTIONS_ITEMS;
-    PARSER_PROPERTIES_ITEMS_LEN = PROPERTIES_ITEMS_LEN;
-    PARSER_PROPERTIES_ITEMS = PROPERTIES_ITEMS;
-    parserInit();
+    /* Parser initialize */
+    parserInit(SECTIONS_ITEMS_LEN, SECTIONS_ITEMS, PROPERTIES_ITEMS_LEN, PROPERTIES_ITEMS);
 
     /* Open the file */
     if ((fp = fopen(filename, "r")) == NULL) {

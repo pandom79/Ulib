@@ -10,10 +10,10 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 static int SECTION_CURRENT = NO_SECTION;
 
-int PARSER_SECTIONS_ITEMS_LEN;
-SectionData *PARSER_SECTIONS_ITEMS;
-int PARSER_PROPERTIES_ITEMS_LEN;
-PropertyData *PARSER_PROPERTIES_ITEMS;
+static int PARSER_SECTIONS_ITEMS_LEN;
+static SectionData *PARSER_SECTIONS_ITEMS;
+static int PARSER_PROPERTIES_ITEMS_LEN;
+static PropertyData *PARSER_PROPERTIES_ITEMS;
 
 static ErrorsData ERRORS_ITEMS[] = {
     { FIRST_CHARACTER_ERR, "An invalid character was found at the beginning of the line!" },
@@ -28,8 +28,12 @@ static ErrorsData ERRORS_ITEMS[] = {
 };
 
 void
-parserInit()
+parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen, PropertyData propertiesItems[])
 {
+    PARSER_SECTIONS_ITEMS_LEN = sectionsLen;
+    PARSER_SECTIONS_ITEMS = sectionsItems;
+    PARSER_PROPERTIES_ITEMS_LEN = propertiesLen;
+    PARSER_PROPERTIES_ITEMS = propertiesItems;
     PropertyData *propertyData = NULL;
     /* Reset all */
     int i;

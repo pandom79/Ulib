@@ -5,6 +5,7 @@ This library provides some functions to handle the following components:<br>
     <li>string</li>
     <li>array</li>
     <li>hash table</li>
+    <li>files parser</li>
     <li>date and time</li>
 </ul>
 
