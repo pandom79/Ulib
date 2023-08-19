@@ -148,16 +148,6 @@ typedef struct {
     int count;
 } SectionData;
 
-/**
- * @brief This variable have to contain the sections number configured from translation unit.
- */
-extern int PARSER_SECTIONS_ITEMS_LEN;
-
-/**
- * @brief This variable have to contain the configured sections from translation unit.
- */
-extern SectionData *PARSER_SECTIONS_ITEMS;
-
 // PARSER PROPERTIES
 
 /** @struct Property
@@ -201,16 +191,6 @@ typedef struct {
     const char **acceptedValues;
     Array *notDupValues;
 } PropertyData;
-
-/**
- * @brief This variable have to contain the properties number configured from translation unit.
- */
-extern int PARSER_PROPERTIES_ITEMS_LEN;
-
-/**
- * @brief This variable have to contain the configured properties from translation unit.
- */
-extern PropertyData *PARSER_PROPERTIES_ITEMS;
 
 // STRING
 
@@ -804,9 +784,13 @@ void htIteratorReset(Ht *ht, HtIterator *htIterator);
 // PARSER
 
 /**
- * Initialize the parser counters.
+ * Initialize the sections and properties counters.
+ * @param[in] sectionsLen
+ * @param[in] sectionItems[]
+ * @param[in] propertiesLen
+ * @param[in] propertyItems[]
  */
-void parserInit();
+void parserInit(int sectionsLen, SectionData sectionItems[], int propertiesLen, PropertyData propertyItems[]);
 
 /**
  * Parse the file line.
