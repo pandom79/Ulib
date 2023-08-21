@@ -797,10 +797,11 @@ void parserInit(int sectionsLen, SectionData sectionItems[], int propertiesLen, 
  * @param[in] line
  * @param[in] numLine
  * @param[in] keyVal
+ * @param[in] sectionData
  * @param[in] propertyData
  * @return integer
  */
-int parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData);
+int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, PropertyData **propertyData);
 
 /**
  * Get the message replacing the arguments into it.

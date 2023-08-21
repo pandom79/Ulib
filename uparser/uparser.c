@@ -136,7 +136,7 @@ getMsg(int numLine, const char *message, ...)
 }
 
 int
-parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData)
+parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, PropertyData **propertyData)
 {
     int rv = 0;
     char *key, *value, *error;
@@ -167,7 +167,7 @@ parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData)
     }
 
     /* Check key and value */
-    if ((error = checkKeyVal(key, value, numLine, propertyData))) {
+    if ((error = checkKeyVal(key, value, numLine, sectionData, propertyData))) {
         arrayAdd(*keyVal, error);
         rv = 1;
     }
@@ -176,7 +176,7 @@ parseLine(char *line, int numLine, Array **keyVal, PropertyData **propertyData)
 }
 
 char*
-checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
+checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, PropertyData **propertyData)
 {
     char *error = NULL;
     bool found, valueFound, isDuplicate;
@@ -201,6 +201,7 @@ checkKeyVal(char *key, char *value, int numLine, PropertyData **propertyData)
         for (int i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
             currentSectionData =  &PARSER_SECTIONS_ITEMS[i];
             if (stringEquals(key, currentSectionData->section.desc)) {
+                *sectionData = currentSectionData;
                 /* Setting the current section */
                 SECTION_CURRENT = i;
                 /* Incrementing the counter */

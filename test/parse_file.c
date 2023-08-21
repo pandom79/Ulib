@@ -90,7 +90,7 @@ PropertyData PROPERTIES_ITEMS[] = {
 
 int main()
 {
-    int rv = 0, numLine = 0;
+    int rv = 0, numLine = 0, i;
     bool isAggregate = true;
     Array *lineData = NULL, *persons = NULL, *events = NULL;
     Array *errors = arrayNew(objectRelease);
@@ -99,6 +99,7 @@ int main()
     size_t len = 0;
     char *line = NULL, *error = NULL, *value = NULL;
     PropertyData *propertyData = NULL;
+    SectionData *sectionData = NULL;
     Person *person = NULL;
     Event *event = NULL;
 
@@ -114,7 +115,7 @@ int main()
 
     while (getline(&line, &len, fp) != -1) {
         numLine++;
-        rv = parseLine(line, numLine, &lineData, &propertyData);
+        rv = parseLine(line, numLine, &lineData, &sectionData, &propertyData);
         if (lineData) {
             if ((error = arrayGet(lineData, 2))) {
                 assert(rv != 0);
@@ -151,18 +152,21 @@ int main()
                     }
                 }
                 else {
-                    value = arrayGet(lineData, 0);
-                    if (stringEquals(value, SECTIONS_ITEMS[PERSON].section.desc)) {
-                        person = personNew();
-                        if (!persons)
-                            persons = arrayNew(personRelease);
-                        arrayAdd(persons, person);
-                    }
-                    else if (stringEquals(value, SECTIONS_ITEMS[EVENT].section.desc)) {
-                        event = eventNew();
-                        if (!events)
-                            events = arrayNew(eventRelease);
-                        arrayAdd(events, event);
+                    switch (sectionData->section.id) {
+                        case PERSON:
+                            person = personNew();
+                            if (!persons)
+                                persons = arrayNew(personRelease);
+                            arrayAdd(persons, person);
+                            break;
+                        case EVENT:
+                            event = eventNew();
+                            if (!events)
+                                events = arrayNew(eventRelease);
+                            arrayAdd(events, event);
+                            break;
+                        default:
+                            break;
                     }
                     /*
                     * If the section is repeatable then we must
@@ -183,6 +187,15 @@ int main()
             rv = 1;
             for (int i = 0; i < errors->size; i++)
                 printf("Error [%d] = %s\n", i, (char *)arrayGet(errors, i));
+        }
+
+        for (i = 0; i < persons->size; i++) {
+            Person *p = arrayGet(persons, i);
+            printf("Person %d = %s ...\n", i, p->name);
+        }
+        for (i = 0; i < events->size; i++) {
+            Event *e = arrayGet(events, i);
+            printf("Event %d = %s ...\n", i, e->city);
         }
 
         arrayRelease(&persons);

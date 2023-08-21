@@ -32,6 +32,6 @@ typedef struct {
 } ErrorsData;
 
 /* Functions */
-char* checkKeyVal(char *key, char *value, int numLine, PropertyData **);
+char* checkKeyVal(char *key, char *value, int numLine, SectionData **, PropertyData **);
 
 #endif // UPARSER_H
