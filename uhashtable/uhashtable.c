@@ -50,7 +50,7 @@ htItemRelease(HtItem **htItem)
 static HtEntry*
 htEntryNew()
 {
-    HtEntry *htEntry = calloc(1, sizeof(htEntry));
+    HtEntry *htEntry = calloc(1, sizeof(HtEntry));
     assert(htEntry);
     htEntry->htItems = arrayNew(htItemRelease);
     return htEntry;
