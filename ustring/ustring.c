@@ -83,21 +83,11 @@ bool
 stringEndsWithStr(const char *str, const char *searchStr)
 {
 
-    int lenStr = (str ? strlen(str) : 0);
-    int lenSearchStr = (searchStr ? strlen(searchStr) : 0);
+    int lenStr = str ? strlen(str) : 0;
+    int lenSearchStr = searchStr ? strlen(searchStr) : 0;
     if (lenStr > 0 && lenSearchStr > 0 && lenSearchStr <= lenStr) {
-        int searchStrIndex = lenSearchStr - 1;
-        str += lenStr - 1;
-        searchStr += lenSearchStr - 1;
-        while (*str) {
-            if (*str == *searchStr) {
-                if (searchStrIndex-- == 0)
-                    return true;
-                str--;
-                searchStr--;
-            }
-            else break;
-        }
+        if (strcmp(str + (lenStr - lenSearchStr), searchStr) == 0)
+            return true;
     }
     return false;
 }
@@ -277,15 +267,10 @@ int
 stringIndexOfChr(const char *str, const char c)
 {
     if (str && c) {
-        char *p = strchr(str, c);
-        if (p) {
-            int index = 0;
-            while (str) {
-                if (str == p)
-                    return index;
-                index++;
-                str++;
-            }
+        int len = strlen(str);
+        for (int i = 0; i < len; i++) {
+            if (str[i] == c)
+                return i;
         }
     }
     return -1;
@@ -295,15 +280,13 @@ int
 stringIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
-        char *p = strstr(str, c);
-        if (p) {
-            int index = 0;
-            while (str) {
-                if (str == p)
-                    return index;
-                index++;
-                str++;
-            }
+        int idx = 0;
+        int lenC = strlen(c);
+        while (*str) {
+            if (strncmp(str, c, lenC) == 0)
+                return idx;
+            str++;
+            idx++;
         }
     }
     return -1;
@@ -326,38 +309,23 @@ int
 stringLastIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
-        int lenStr = strlen(str);
         int lenC = strlen(c);
-        int indexStr = lenStr - 1;
-        int indexC = lenC - 1;
-        int elements = 0;
-        bool found = false;
-        while (indexStr >= 0) {
-            if (str[indexStr] == c[indexC]) {
-                found = true;
-                elements++;
-                if (elements == lenC)
-                    return indexStr;
-                indexStr--;
-                indexC--;
-                continue;
-            }
-            else if (found) {
-                indexC += elements;
-                elements = 0;
-                found = false;
-            }
-            else if (!found)
-                indexStr--;
+        int lenStr = strlen(str);
+        int idx = lenStr - 1;
+        str += lenStr;
+        while (*(--str)) {
+            if (strncmp(str, c, lenC) == 0)
+                return idx;
+            else
+                idx--;
         }
-
     }
     return -1;
 }
 
 char*
-stringSub(const char *str, int startIdx, int endIdx) {
-
+stringSub(const char *str, int startIdx, int endIdx)
+{
     char *ret = NULL;
     int len = str ? strlen(str) : 0;
     if (len > 0 && startIdx >= 0 && endIdx >= 0 && endIdx < len) {

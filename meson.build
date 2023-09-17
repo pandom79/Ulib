@@ -3,11 +3,11 @@
 # it under the terms of the GNU General Public License version 3.
 # See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
-project('ulib', 'c', version: '4.1.2', default_options: ['warning_level=3', 'prefix=/usr'] )
+project('ulib', 'c', version: '4.1.3', default_options: ['warning_level=3', 'prefix=/usr'] )
 add_global_arguments(['-Wno-incompatible-pointer-types'], language: 'c')
 
 prj_name = 'ulib'
-ver = '4.1.2'
+ver = '4.1.3'
 so_ver = '4'
 
 # Get paths
@@ -96,6 +96,9 @@ if (no_test == false)
     test_string_copy = executable('test_string_copy', 'test/string_copy.c', link_with: ulib)
     test_string_file_size = executable('test_string_file_size', 'test/string_file_size.c', link_with: ulib)
     test_string_sub = executable('test_string_sub', 'test/string_sub.c', link_with: ulib)
+    test_string_endsWith = executable('test_string_endsWith', 'test/string_endsWith.c', link_with: ulib)
+    test_string_indexOf = executable('test_string_indexOf', 'test/string_indexOf.c', link_with: ulib)
+    test_string_last_indexOf = executable('test_string_last_indexOf', 'test/string_last_indexOf.c', link_with: ulib)
     test_array_str_copy = executable('test_array_str_copy', 'test/array_str_copy.c', link_with: ulib)
     test_array_str_contains = executable('test_array_str_contains', 'test/array_str_contains.c', link_with: ulib)
     test_array_release = executable('test_array_release', 'test/array_release.c', link_with: ulib)
@@ -110,6 +113,9 @@ if (no_test == false)
     test('test_string_copy', test_string_copy)
     test('test_string_file_size', test_string_file_size)
     test('test_string_sub', test_string_sub)
+    test('test_string_endsWith', test_string_endsWith)
+    test('test_string_indexOf', test_string_indexOf)
+    test('test_string_last_indexOf', test_string_last_indexOf)
     test('test_array_str_copy', test_array_str_copy)
     test('test_array_str_contains', test_array_str_contains)
     test('test_array_release', test_array_release)
