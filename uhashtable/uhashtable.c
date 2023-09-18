@@ -220,7 +220,7 @@ htSet(Ht **ht, const char *key, void *value)
 {
     if (*ht && key && !stringEquals(key, "")) {
         int idx = hash((*ht)->capacity, key);
-        HtEntry *htEntry = (HtEntry *)arrayGet((*ht)->htEntries, idx);
+        HtEntry *htEntry = arrayGet((*ht)->htEntries, idx);
         if (htEntry) {
             Array **htItems = &htEntry->htItems;
             int lenHtItems = (*htItems)->size;
