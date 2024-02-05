@@ -284,3 +284,25 @@ htIteratorReset(Ht *ht, HtIterator *htIterator)
         htIterator->hashItemIdx = -1;
     }
 }
+
+void
+htSetDebugData(Ht *ht)
+{
+    if (ht) {
+        Array *htEntries = ht->htEntries;
+        int collisions, totCollisions, maxCollisionsForEntry;
+        collisions = totCollisions = maxCollisionsForEntry = 0;
+        for (int i = 0; i < htEntries->size; i++) {
+            HtEntry *htEntry = arrayGet(htEntries, i);
+            if (htEntry) {
+                int lenHtItems = htEntry->htItems->size;
+                collisions = lenHtItems - 1;
+                totCollisions += collisions;
+                if (collisions > maxCollisionsForEntry)
+                    maxCollisionsForEntry = collisions;
+            }
+        }
+        ht->totCollisions = totCollisions;
+        ht->maxCollisionsForEntry = maxCollisionsForEntry;
+    }
+}

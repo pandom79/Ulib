@@ -93,6 +93,10 @@ typedef struct {
  *  It represents an array of HtEntry structure.
  *  @var Ht::releaseFn
  *  It represents a generic pointer to release function.
+ *  @var Ht::totCollisions
+ *  It represents the total collisions number.
+ *  @var Ht::maxCollisionsForEntry
+ *  It represents the maximum collisions number for entry.
  */
 typedef struct {
     int initialCapacity;
@@ -100,6 +104,8 @@ typedef struct {
     int numOfItems;
     Array *htEntries;
     void (*releaseFn)(void **);
+    int totCollisions;
+    int maxCollisionsForEntry;
 } Ht;
 
 /** @struct HtIterator
@@ -758,6 +764,12 @@ bool htRemove(Ht **ht, const char *key);
  * @return true/false
  */
 bool htSet(Ht **ht, const char *key, void *value);
+
+/**
+ * Set data for debug/diagnostic purpose.<br>
+ * @param[in] ht
+ */
+void htSetDebugData(Ht *ht);
 
 /**
  * Return the hast table iterator if 'ht' hash table is not null, NULL otherwise.<br>
