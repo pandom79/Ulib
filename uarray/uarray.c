@@ -56,20 +56,22 @@ arrayAdd(Array *array, void *element)
 }
 
 bool
-arrayAddFirst(Array *array, void *element)
+arrayInsertAt(Array *array, int idx, void *element)
 {
-    if (array) {
-        int size = ++array->size;
-        void ***arr = &array->arr;
-        if (size > 0) {
-            *arr = realloc(*arr, (size) * sizeof(void *));
+    if (array && idx >= 0) {
+        int *size = &array->size;
+        if (idx == *size)
+            return arrayAdd(array, element);
+        if (idx < *size) {
+            (*size)++;
+            void ***arr = &array->arr;
+            *arr = realloc(*arr, (*size) * sizeof(void *));
             assert(*arr);
+            for (int i = (*size - 1); i > idx; i--)
+                (*arr)[i] = (*arr)[i - 1];
+            (*arr)[idx] = element;
+            return true;
         }
-        for (int i = (size - 1); i > 0; i--)
-            (*arr)[i] = (*arr)[i - 1];
-
-        (*arr)[0] = element;
-        return true;
     }
     return false;
 }

@@ -516,7 +516,7 @@ void objectRelease(void **ptr);
  * Return an array of strings splitting 'str' string using 'token' string as a delimiter.<br>
  * Return NULL if the 'token' string is not found.<br>
  * The array elements will be allocate or not according 'alloc' parameter value.<br>
- * It must freed by arrayRelease() function which will also free eventual allocate elements inside.
+ * It must be freed by arrayRelease() function which will also free eventual allocate elements inside.
  * @param[in] str
  * @param[in] token
  * @param[in] alloc
@@ -527,7 +527,7 @@ Array* stringSplit(char *str, const char *token, bool alloc);
 /**
  * Return an array of two elements splitting once 'str' string using 'token' string as a delimiter.<br>
  * Return NULL if the 'token' string is not found.<br>
- * It must freed by arrayRelease() function.
+ * It must be freed by arrayRelease() function.
  * @param[in] str
  * @param[in] token
  * @return Array
@@ -537,7 +537,7 @@ Array* stringSplitFirst(char *str, const char *token);
 /**
  * Return a string which represents the size of a resource.<br>
  * Return NULL if the 'size' parameter value is less than zero.<br>
- * It must freed by objectRelease() function.
+ * It must be freed by objectRelease() function.
  * @param[in] size
  * @return char*
  */
@@ -551,7 +551,7 @@ char* stringGetFileSize(off_t size);
  * you can pass a function pointer which will be automatically called<br>
  * when we remove or set the element or when we release the whole array.<br>
  * It's optional thus can accept NULL value.<br>
- * It must freed by arrayRelease() function.<br>
+ * It must be freed by arrayRelease() function.<br>
  * @param[in] releaseFn
  * @return Array
  */
@@ -563,7 +563,7 @@ Array* arrayNew(void (*releaseFn)(void **));
  * you can pass a function pointer which will be automatically called<br>
  * when we remove or set the element or when we release the whole array.<br>
  * It's optional thus can accept NULL value.<br>
- * It must freed by arrayRelease() function.<br>
+ * It must be freed by arrayRelease() function.<br>
  * @param[in] amount
  * @param[in] releaseFn
  * @return Array
@@ -579,12 +579,13 @@ Array* arrayNewWithAmount(int amount, void (*releaseFn)(void **));
 bool arrayAdd(Array *arr, void *ptr);
 
 /**
- * Return true if a generic 'ptr' pointer is added as first element of 'arr' array, false otherwise.
+ * Return true if a generic 'ptr' pointer is inserted at 'idx' position of 'arr' array, false otherwise.
  * @param[in] arr
+ * @param[in] idx
  * @param[in] ptr
  * @return true/false
  */
-bool arrayAddFirst(Array *arr, void *ptr);
+bool arrayInsertAt(Array *arr, int idx, void *ptr);
 
 /**
  * Return true if the element at the 'idx' position is removed from 'arr' array, false otherwise.
@@ -711,7 +712,7 @@ char* stringGetDiffTime(Time *timeEnd, Time *timeStart);
  * you can pass a function pointer which will be automatically called<br>
  * when we remove or set the element or when we release the whole hash table.<br>
  * It's optional thus can accept NULL value.<br>
- * It must freed by htRelease() function.<br>
+ * It must be freed by htRelease() function.<br>
  * About the initial capacity, it is highly recommended set a number<br>
  * which must not represent a power of 2 to avoid the collisions as much as possible.<br>
  * A prime number is preferable.<br>

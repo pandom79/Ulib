@@ -18,9 +18,26 @@ int main()
         printf("Copied elem = %s\n", (char *)arrayGet(arr, i));
     }
 
-    Array *arr2 = arrayNew(NULL);
-    arrayRelease(&arr2);
+    printf("\n\nTest insertAt\n");
+    char *element = stringNew("Ciccio");
+    int idx = 3;
+    Array *arr2 = arrayNew(objectRelease);
+    arrayAdd(arr2, stringNew("Domenico"));
+    arrayAdd(arr2, stringNew("Antonio"));
+    arrayAdd(arr2, stringNew("Luigi"));
+    arrayAdd(arr2, stringNew("Arturo"));
+    if (arrayInsertAt(arr2, idx, element))
+        printf("'%s' inserted at '%d' index!\n", element, idx);
+    else {
+        printf("'%s' not inserted at '%d' index!\n", element, idx);
+        objectRelease(&element);
+    }
 
+    for (int i = 0; i < arr2->size; i++) {
+        printf("Element = %s\n", (char *)arrayGet(arr2, i));
+    }
+
+    arrayRelease(&arr2);
     arrayRelease(&arr);
     arrayRelease(&copy);
     arrayRelease(&arr);
