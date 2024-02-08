@@ -532,7 +532,7 @@ Array* stringSplit(char *str, const char *token, bool alloc);
  * @param[in] token
  * @return Array
  */
-Array* stringSplitFirst(char *str, const char *token);
+Array* stringSplitOnce(char *str, const char *token);
 
 /**
  * Return a string which represents the size of a resource.<br>

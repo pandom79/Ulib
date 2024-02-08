@@ -449,7 +449,7 @@ stringSplit(char *str, const char *sep, bool allocElements)
 }
 
 Array*
-stringSplitFirst(char *str, const char *sep)
+stringSplitOnce(char *str, const char *sep)
 {
     int idx = -1;
     if (str && sep && (idx = stringIndexOfStr(str, sep)) != -1) {

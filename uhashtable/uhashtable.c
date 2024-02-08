@@ -76,6 +76,8 @@ htNew(int initialCapacity, void (*releaseFn)(void **))
     ht->capacity = initialCapacity;
     ht->releaseFn = releaseFn;
     ht->htEntries = arrayNewWithAmount(initialCapacity, htEntryRelease);
+    ht->totCollisions = -1;
+    ht->maxCollisionsForEntry = -1;
     return ht;
 }
 
@@ -290,9 +292,10 @@ htSetDebugData(Ht *ht)
 {
     if (ht) {
         Array *htEntries = ht->htEntries;
-        int collisions, totCollisions, maxCollisionsForEntry;
+        int collisions, totCollisions, maxCollisionsForEntry, size;
         collisions = totCollisions = maxCollisionsForEntry = 0;
-        for (int i = 0; i < htEntries->size; i++) {
+        size = htEntries ? htEntries->size : 0;
+        for (int i = 0; i < size; i++) {
             HtEntry *htEntry = arrayGet(htEntries, i);
             if (htEntry) {
                 int lenHtItems = htEntry->htItems->size;

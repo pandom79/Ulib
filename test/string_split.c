@@ -2,10 +2,10 @@
 
 int main()
 {
-    printf("Function stringSplitFirst\n");
+    printf("Function stringSplitOnce\n");
     char *test = stringNew("Hello|World!|How|Are|You");
     printf("Word = %s\n", test);
-    Array *values = stringSplitFirst(test, "|");
+    Array *values = stringSplitOnce(test, "|");
     for (int i = 0; i < values->size; i++) {
         printf("Token = %s\n", (char *)arrayGet(values, i));
     }

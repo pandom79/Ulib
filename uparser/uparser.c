@@ -150,7 +150,7 @@ parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, Pr
             return rv;
 
         /* Split */
-        *keyVal = stringSplitFirst(line, "=");
+        *keyVal = stringSplitOnce(line, "=");
         if (!(*keyVal)) {
             *keyVal = arrayNew(objectRelease);
             /* Adding only the key which represents a Section */
