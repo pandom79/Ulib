@@ -9,8 +9,7 @@ bool isPowerOfTwo(int x)
 bool prime(int n)
 {
     int i;
-    for (i = 2; i <= n/2; i++)
-    {
+    for (i = 2; i <= n / 2; i++) {
         if (n % i != 0)
             continue;
         else
@@ -44,17 +43,17 @@ int main()
 
     // test add and resize
     for (int i = 0; i < 1500; i++) {
-        char key[50] = {0};
-        char value[50] = {0};
+        char key[50] = { 0 };
+        char value[50] = { 0 };
         sprintf(key, "Domenico%d", i);
         sprintf(value, "Panella%d", i);
         htAdd(&ht, key, stringNew(value));
     }
 
     // test set
-//    htSet(&ht, "Domenico9", stringNew("PanellaReplaced"));
-//    htSet(&ht, "Domenico9", NULL);
-//    htSet(&ht, "Domenico9", NULL);
+    //    htSet(&ht, "Domenico9", stringNew("PanellaReplaced"));
+    //    htSet(&ht, "Domenico9", NULL);
+    //    htSet(&ht, "Domenico9", NULL);
 
     // test get
     char *value = htGet(ht, "Domenico608");
@@ -66,35 +65,35 @@ int main()
 
     // test remove and resize
     for (int i = 0; i < 1485; i++) {
-        char key[50] = {0};
+        char key[50] = { 0 };
         sprintf(key, "Domenico%d", i);
         if (htRemove(&ht, key)) {
-             printf("%s removed!\n", key);
+            printf("%s removed!\n", key);
         }
     }
 
-//    if (htRemove(&ht, "Luigi"))
-//        printf("Luigi removed!\n");
-//    if (htRemove(&ht, "Domenico"))
-//        printf("Domenico removed!\n");
-//    if (htRemove(&ht, "Domenico1"))
-//        printf("Domenico1 removed!\n");
-//    if (htRemove(&ht, "Domenico2"))
-//        printf("Domenico2 removed!\n");
-//    if (htRemove(&ht, "Francesco"))
-//        printf("Francesco removed!\n");
-//    if (htRemove(&ht, "Marianeve"))
-//        printf("Marianeve removed!\n");
-//    if (htRemove(&ht, "Michele"))
-//        printf("Michele removed!\n");
-//    if (htRemove(&ht, "Arturo"))
-//        printf("Arturo removed!\n");
-//    if (htRemove(&ht, "Antonio"))
-//        printf("Antonio removed!\n");
-//    if (htRemove(&ht, "Ciccio"))
-//        printf("Ciccio removed!\n");
-//    else
-//        printf("Ciccio not removed!\n");
+    //    if (htRemove(&ht, "Luigi"))
+    //        printf("Luigi removed!\n");
+    //    if (htRemove(&ht, "Domenico"))
+    //        printf("Domenico removed!\n");
+    //    if (htRemove(&ht, "Domenico1"))
+    //        printf("Domenico1 removed!\n");
+    //    if (htRemove(&ht, "Domenico2"))
+    //        printf("Domenico2 removed!\n");
+    //    if (htRemove(&ht, "Francesco"))
+    //        printf("Francesco removed!\n");
+    //    if (htRemove(&ht, "Marianeve"))
+    //        printf("Marianeve removed!\n");
+    //    if (htRemove(&ht, "Michele"))
+    //        printf("Michele removed!\n");
+    //    if (htRemove(&ht, "Arturo"))
+    //        printf("Arturo removed!\n");
+    //    if (htRemove(&ht, "Antonio"))
+    //        printf("Antonio removed!\n");
+    //    if (htRemove(&ht, "Ciccio"))
+    //        printf("Ciccio removed!\n");
+    //    else
+    //        printf("Ciccio not removed!\n");
 
     /* Set debug data */
     htSetDebugData(ht);

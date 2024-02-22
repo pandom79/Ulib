@@ -11,8 +11,7 @@ int main()
     if (stringCopy(test, "A"))
         printf("Copied!\n");
 
-
-    char value[15] = {0};
+    char value[15] = { 0 };
     if (stringCopy(value, "VALUE"))
         printf("Copied! Value = %s", value);
 

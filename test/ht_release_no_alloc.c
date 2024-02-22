@@ -33,15 +33,15 @@ int main()
     htAdd(&ht, "Arturo", "Cirillo");
 
     // test set
-//    htSet(&ht, "Domenico", stringNew("Panella2"));
+    //    htSet(&ht, "Domenico", stringNew("Panella2"));
 
     // test get
-//    HtItem *htItem = htGet(ht, "Domenico");
-//    if (htItem)
-//        printf("Domenico key is present! Value = %s\n", (char *)htItem->value);
-//    htItem = htGet(ht, "Ciccio");
-//    if (!htItem)
-//        printf("Ciccio key is not present!\n");
+    //    HtItem *htItem = htGet(ht, "Domenico");
+    //    if (htItem)
+    //        printf("Domenico key is present! Value = %s\n", (char *)htItem->value);
+    //    htItem = htGet(ht, "Ciccio");
+    //    if (!htItem)
+    //        printf("Ciccio key is not present!\n");
 
     // test remove and resize
     if (htRemove(&ht, "Luigi"))
@@ -54,18 +54,18 @@ int main()
         printf("Domenico2 removed!\n");
     if (htRemove(&ht, "Francesco"))
         printf("Francesco removed!\n");
-//    if (htRemove(&ht, "Marianeve"))
-//        printf("Marianeve removed!\n");
-//    if (htRemove(&ht, "Michele"))
-//        printf("Michele removed!\n");
-//    if (htRemove(&ht, "Arturo"))
-//        printf("Arturo removed!\n");
-//    if (htRemove(&ht, "Antonio"))
-//        printf("Antonio removed!\n");
-//    if (htRemove(&ht, "Ciccio"))
-//        printf("Ciccio removed!\n");
-//    else
-//        printf("Ciccio not removed!\n");
+    //    if (htRemove(&ht, "Marianeve"))
+    //        printf("Marianeve removed!\n");
+    //    if (htRemove(&ht, "Michele"))
+    //        printf("Michele removed!\n");
+    //    if (htRemove(&ht, "Arturo"))
+    //        printf("Arturo removed!\n");
+    //    if (htRemove(&ht, "Antonio"))
+    //        printf("Antonio removed!\n");
+    //    if (htRemove(&ht, "Ciccio"))
+    //        printf("Ciccio removed!\n");
+    //    else
+    //        printf("Ciccio not removed!\n");
 
     /* Set debug data */
     htSetDebugData(ht);

@@ -12,8 +12,8 @@ typedef struct {
     int num_people;
 } Event;
 
-static Person*
-personNew() {
+static Person *personNew()
+{
     Person *person = calloc(1, sizeof(Person));
     assert(person);
     person->name = NULL;
@@ -22,8 +22,7 @@ personNew() {
     return person;
 }
 
-static void
-personRelease(Person **person)
+static void personRelease(Person **person)
 {
     if (*person) {
         objectRelease(&(*person)->name);
@@ -32,8 +31,8 @@ personRelease(Person **person)
     }
 }
 
-static Event*
-eventNew() {
+static Event *eventNew()
+{
     Event *event = calloc(1, sizeof(Event));
     assert(event);
     event->type = NULL;
@@ -42,8 +41,7 @@ eventNew() {
     return event;
 }
 
-static void
-eventRelease(Event **event)
+static void eventRelease(Event **event)
 {
     if (*event) {
         objectRelease(&(*event)->type);
@@ -54,20 +52,10 @@ eventRelease(Event **event)
 
 // INIT PARSER CONFIGURATION
 
-enum SectionNameEnum  {
-    PERSON = 0,
-    EVENT = 1
-};
+enum SectionNameEnum { PERSON = 0, EVENT = 1 };
 
 /* Properties */
-enum PropertyNameEnum  {
-    NAME = 0,
-    SURNAME = 1,
-    AGE = 2,
-    TYPE = 3,
-    CITY = 4,
-    NUM_PEOPLE = 5
-};
+enum PropertyNameEnum { NAME = 0, SURNAME = 1, AGE = 2, TYPE = 3, CITY = 4, NUM_PEOPLE = 5 };
 
 /* Sections */
 int SECTIONS_ITEMS_LEN = 2;
@@ -78,12 +66,12 @@ SectionData SECTIONS_ITEMS[] = {
 
 int PROPERTIES_ITEMS_LEN = 6;
 PropertyData PROPERTIES_ITEMS[] = {
-    { PERSON, { NAME, "Name" },             false, true, false, 0, NULL, NULL },
-    { PERSON, { SURNAME, "Surname" },       false, true, false, 0, NULL, NULL },
-    { PERSON, { AGE, "Age" },               false, true, true, 0, NULL, NULL },
-    { EVENT, { TYPE, "Type" },              false, true, false, 0, NULL, NULL },
-    { EVENT, { CITY, "City" },              false, true, false, 0, NULL, NULL },
-    { EVENT, { NUM_PEOPLE, "Num_people" },  false, true, true, 0, NULL, NULL },
+    { PERSON, { NAME, "Name" }, false, true, false, 0, NULL, NULL },
+    { PERSON, { SURNAME, "Surname" }, false, true, false, 0, NULL, NULL },
+    { PERSON, { AGE, "Age" }, false, true, true, 0, NULL, NULL },
+    { EVENT, { TYPE, "Type" }, false, true, false, 0, NULL, NULL },
+    { EVENT, { CITY, "City" }, false, true, false, 0, NULL, NULL },
+    { EVENT, { NUM_PEOPLE, "Num_people" }, false, true, true, 0, NULL, NULL },
 };
 
 // END PARSER CONFIGURATION
@@ -126,11 +114,10 @@ int main()
                     arrayRelease(&lineData);
                     continue;
                 }
-            }
-            else {
+            } else {
                 if ((value = arrayGet(lineData, 1))) {
                     if (person || event)
-                    switch (propertyData->property.id) {
+                        switch (propertyData->property.id) {
                         case NAME:
                             person->name = stringNew(value);
                             break;
@@ -149,24 +136,23 @@ int main()
                         case NUM_PEOPLE:
                             event->num_people = atoi(value);
                             break;
-                    }
-                }
-                else {
+                        }
+                } else {
                     switch (sectionData->section.id) {
-                        case PERSON:
-                            person = personNew();
-                            if (!persons)
-                                persons = arrayNew(personRelease);
-                            arrayAdd(persons, person);
-                            break;
-                        case EVENT:
-                            event = eventNew();
-                            if (!events)
-                                events = arrayNew(eventRelease);
-                            arrayAdd(events, event);
-                            break;
-                        default:
-                            break;
+                    case PERSON:
+                        person = personNew();
+                        if (!persons)
+                            persons = arrayNew(personRelease);
+                        arrayAdd(persons, person);
+                        break;
+                    case EVENT:
+                        event = eventNew();
+                        if (!events)
+                            events = arrayNew(eventRelease);
+                        arrayAdd(events, event);
+                        break;
+                    default:
+                        break;
                     }
                     /*
                     * If the section is repeatable then we must
@@ -181,29 +167,29 @@ int main()
         arrayRelease(&lineData);
     }
 
-    out:
-        parserEnd(&errors, isAggregate);
-        if (errors && errors->size > 0) {
-            rv = 1;
-            for (int i = 0; i < errors->size; i++)
-                printf("Error [%d] = %s\n", i, (char *)arrayGet(errors, i));
-        }
+out:
+    parserEnd(&errors, isAggregate);
+    if (errors && errors->size > 0) {
+        rv = 1;
+        for (int i = 0; i < errors->size; i++)
+            printf("Error [%d] = %s\n", i, (char *)arrayGet(errors, i));
+    }
 
-        for (i = 0; i < persons->size; i++) {
-            Person *p = arrayGet(persons, i);
-            printf("Person %d = %s ...\n", i, p->name);
-        }
-        for (i = 0; i < events->size; i++) {
-            Event *e = arrayGet(events, i);
-            printf("Event %d = %s ...\n", i, e->city);
-        }
+    for (i = 0; i < persons->size; i++) {
+        Person *p = arrayGet(persons, i);
+        printf("Person %d = %s ...\n", i, p->name);
+    }
+    for (i = 0; i < events->size; i++) {
+        Event *e = arrayGet(events, i);
+        printf("Event %d = %s ...\n", i, e->city);
+    }
 
-        arrayRelease(&persons);
-        arrayRelease(&events);
-        arrayRelease(&errors);
-        arrayRelease(&lineData);
-        objectRelease(&line);
-        fclose(fp);
-        fp = NULL;
-        return rv;
+    arrayRelease(&persons);
+    arrayRelease(&events);
+    arrayRelease(&errors);
+    arrayRelease(&lineData);
+    objectRelease(&line);
+    fclose(fp);
+    fp = NULL;
+    return rv;
 }

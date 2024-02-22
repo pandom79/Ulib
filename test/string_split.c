@@ -17,8 +17,8 @@ int main()
     for (int i = 0; i < values->size; i++) {
         printf("Token = %s\n", (char *)arrayGet(values, i));
     }
+
     arrayRelease(&values);
     objectRelease(&test);
-
     return 0;
 }

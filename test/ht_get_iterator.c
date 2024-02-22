@@ -9,8 +9,7 @@ bool isPowerOfTwo(int x)
 bool prime(int n)
 {
     int i;
-    for (i = 2; i <= n/2; i++)
-    {
+    for (i = 2; i <= n / 2; i++) {
         if (n % i != 0)
             continue;
         else
@@ -44,8 +43,8 @@ int main()
 
     // test add and resize
     for (int i = 0; i < 256; i++) {
-        char key[50] = {0};
-        char value[50] = {0};
+        char key[50] = { 0 };
+        char value[50] = { 0 };
         sprintf(key, "Domenico%d", i);
         sprintf(value, "Panella%d", i);
         htAdd(&ht, key, stringNew(value));
@@ -78,19 +77,18 @@ int main()
         }
     }
 
-//    printf("\n\nTest reset");
-//    htIteratorReset(ht, htIter);
-//    printf("\n\nIterator\n");
-//    if (htIter) {
-//        char *value = NULL;
-//        while ((value = htGetNextIter(htIter))) {
-//            printf("Hash idx = %d\n", htIter->hashIdx);
-//            printf("    Hash item idx = %d, value = %s\n", htIter->hashItemIdx, value);
-//        }
-//    }
+    //    printf("\n\nTest reset");
+    //    htIteratorReset(ht, htIter);
+    //    printf("\n\nIterator\n");
+    //    if (htIter) {
+    //        char *value = NULL;
+    //        while ((value = htGetNextIter(htIter))) {
+    //            printf("Hash idx = %d\n", htIter->hashIdx);
+    //            printf("    Hash item idx = %d, value = %s\n", htIter->hashItemIdx, value);
+    //        }
+    //    }
 
     objectRelease(&htIter);
-
 
     printf("\nSUMMARY\n");
     printf("Capacity = %d\n", ht->capacity);

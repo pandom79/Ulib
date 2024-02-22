@@ -8,8 +8,7 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 #include "../ulib.h"
 
-Array*
-arrayNew(void (*releaseFn)(void **))
+Array *arrayNew(void (*releaseFn)(void **))
 {
     Array *array = calloc(1, sizeof(Array));
     assert(array);
@@ -22,8 +21,7 @@ arrayNew(void (*releaseFn)(void **))
     return array;
 }
 
-Array*
-arrayNewWithAmount(int amount, void (*releaseFn)(void **))
+Array *arrayNewWithAmount(int amount, void (*releaseFn)(void **))
 {
     if (amount > 0) {
         Array *array = calloc(1, sizeof(Array));
@@ -33,14 +31,13 @@ arrayNewWithAmount(int amount, void (*releaseFn)(void **))
         assert(array->arr);
         if (releaseFn)
             array->releaseFn = releaseFn;
-
         return array;
     }
+
     return NULL;
 }
 
-bool
-arrayAdd(Array *array, void *element)
+bool arrayAdd(Array *array, void *element)
 {
     if (array) {
         int size = array->size++;
@@ -52,11 +49,11 @@ arrayAdd(Array *array, void *element)
         (*arr)[size] = element;
         return true;
     }
+
     return false;
 }
 
-bool
-arrayInsertAt(Array *array, int idx, void *element)
+bool arrayInsertAt(Array *array, int idx, void *element)
 {
     if (array && idx >= 0) {
         int *size = &array->size;
@@ -73,32 +70,30 @@ arrayInsertAt(Array *array, int idx, void *element)
             return true;
         }
     }
+
     return false;
 }
 
-bool
-arrayRemoveAt(Array *array, int idx)
+bool arrayRemoveAt(Array *array, int idx)
 {
     if (array) {
         void **arr = array->arr;
         int *size = &array->size;
         void (*releaseFn)(void **) = array->releaseFn;
         if (arr && idx >= 0 && idx < *size) {
-            /* Clean the item */
             if (releaseFn)
                 (*releaseFn)(&(arr[idx]));
-
             if (idx < (*size - 1))
                 memmove(arr + idx, arr + idx + 1, (*size - (idx + 1)) * sizeof(void *));
             (*size)--;
             return true;
         }
     }
+
     return false;
 }
 
-bool
-arrayRemove(Array *array, void *element)
+bool arrayRemove(Array *array, void *element)
 {
     if (array) {
         void **arr = array->arr;
@@ -109,7 +104,6 @@ arrayRemove(Array *array, void *element)
                 /* Clean the item */
                 if (releaseFn)
                     (*releaseFn)(&element);
-
                 if (i < (*size - 1))
                     memmove(arr + i, arr + i + 1, (*size - (i + 1)) * sizeof(void *));
                 (*size)--;
@@ -117,11 +111,11 @@ arrayRemove(Array *array, void *element)
             }
         }
     }
+
     return false;
 }
 
-void
-arrayRelease(Array **array)
+void arrayRelease(Array **array)
 {
     if (*array) {
         void **arr = (*array)->arr;
@@ -136,15 +130,13 @@ arrayRelease(Array **array)
     }
 }
 
-bool
-arraySet(Array *array, void *element, int idx)
+bool arraySet(Array *array, void *element, int idx)
 {
     if (array && idx < array->size) {
         void **arr = array->arr;
         void (*releaseFn)(void **) = array->releaseFn;
         if (releaseFn)
             releaseFn(&(arr[idx]));
-
         arr[idx] = element;
         return true;
     }
@@ -152,8 +144,7 @@ arraySet(Array *array, void *element, int idx)
     return false;
 }
 
-bool
-arrayContainsStr(Array *array, const char *str)
+bool arrayContainsStr(Array *array, const char *str)
 {
     int len = (array ? array->size : 0);
     for (int i = 0; i < len; i++) {
@@ -164,8 +155,7 @@ arrayContainsStr(Array *array, const char *str)
     return false;
 }
 
-Array*
-arrayStrCopy(Array *strArr)
+Array *arrayStrCopy(Array *strArr)
 {
     Array *ret = NULL;
     if (strArr) {
@@ -176,11 +166,11 @@ arrayStrCopy(Array *strArr)
                 arrayAdd(ret, stringNew(arrayGet(strArr, i)));
         }
     }
+
     return ret;
 }
 
-void*
-arrayGet(Array *array, int idx)
+void *arrayGet(Array *array, int idx)
 {
     if (array && idx < array->size)
         return array->arr[idx];
@@ -188,8 +178,7 @@ arrayGet(Array *array, int idx)
     return NULL;
 }
 
-int
-arrayGetIdx(Array *array, void *element)
+int arrayGetIdx(Array *array, void *element)
 {
     if (array) {
         void **arr = array->arr;

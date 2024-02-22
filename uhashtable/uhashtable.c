@@ -8,35 +8,37 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 #include "uhashtable.h"
 
-static int
-hash(int capacity, const char* key)
+static int hash(int capacity, const char *key)
 {
+    int bucketIdx = 0, len = 0, factor = 31;
+
     assert(capacity > 0);
     assert(key && !stringEquals(key, ""));
-    int bucketIdx = 0, factor = 31;
-    int len = strlen(key);
+
+    len = strlen(key);
     for (int i = 0; i < len; i++) {
         bucketIdx = ((bucketIdx % capacity) + (((int)key[i]) * factor) % capacity) % capacity;
         factor = ((factor % __INT16_MAX__) * (31 % __INT16_MAX__)) % __INT16_MAX__;
     }
+
     return bucketIdx;
 }
 
-static HtItem*
-htItemNew(Ht *ht, const char *key, void *value)
+static HtItem *htItemNew(Ht *ht, const char *key, void *value)
 {
     assert(key && !stringEquals(key, ""));
     assert(ht);
+
     HtItem *htItem = calloc(1, sizeof(HtItem));
     assert(htItem);
     htItem->key = stringNew(key);
     htItem->value = value;
     htItem->releaseFn = ht->releaseFn;
+
     return htItem;
 }
 
-static void
-htItemRelease(HtItem **htItem)
+static void htItemRelease(HtItem **htItem)
 {
     if (*htItem) {
         objectRelease(&(*htItem)->key);
@@ -47,17 +49,16 @@ htItemRelease(HtItem **htItem)
     }
 }
 
-static HtEntry*
-htEntryNew()
+static HtEntry *htEntryNew()
 {
     HtEntry *htEntry = calloc(1, sizeof(HtEntry));
     assert(htEntry);
     htEntry->htItems = arrayNew(htItemRelease);
+
     return htEntry;
 }
 
-static void
-htEntryRelease(HtEntry **htEntry)
+static void htEntryRelease(HtEntry **htEntry)
 {
     if (*htEntry) {
         arrayRelease(&(*htEntry)->htItems);
@@ -65,10 +66,10 @@ htEntryRelease(HtEntry **htEntry)
     }
 }
 
-Ht*
-htNew(int initialCapacity, void (*releaseFn)(void **))
+Ht *htNew(int initialCapacity, void (*releaseFn)(void **))
 {
     assert(initialCapacity > 0);
+
     Ht *ht = calloc(1, sizeof(Ht));
     assert(ht);
     ht->numOfItems = 0;
@@ -78,11 +79,11 @@ htNew(int initialCapacity, void (*releaseFn)(void **))
     ht->htEntries = arrayNewWithAmount(initialCapacity, htEntryRelease);
     ht->totCollisions = -1;
     ht->maxCollisionsForEntry = -1;
+
     return ht;
 }
 
-void
-htRelease(Ht **ht)
+void htRelease(Ht **ht)
 {
     if (*ht) {
         arrayRelease(&(*ht)->htEntries);
@@ -90,11 +91,11 @@ htRelease(Ht **ht)
     }
 }
 
-static void
-htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
+static void htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
 {
     assert(*ht);
     assert(capacity > 0);
+
     Ht *newHt = htNew(capacity, releaseFn);
     newHt->initialCapacity = (*ht)->initialCapacity;
     Array *htEntries = (*ht)->htEntries;
@@ -134,8 +135,7 @@ htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
     *ht = newHt;
 }
 
-void*
-htGet(Ht *ht, const char *key)
+void *htGet(Ht *ht, const char *key)
 {
     if (ht && key && !stringEquals(key, "")) {
         int idx = hash(ht->capacity, key);
@@ -150,11 +150,11 @@ htGet(Ht *ht, const char *key)
             }
         }
     }
+
     return NULL;
 }
 
-bool
-htAdd(Ht **ht, const char *key, void *value)
+bool htAdd(Ht **ht, const char *key, void *value)
 {
     if (*ht && key && !stringEquals(key, "")) {
         int *capacity = &(*ht)->capacity;
@@ -181,11 +181,11 @@ htAdd(Ht **ht, const char *key, void *value)
             htResize(ht, *capacity * 2, (*ht)->releaseFn);
         return true;
     }
+
     return false;
 }
 
-bool
-htRemove(Ht **ht, const char *key)
+bool htRemove(Ht **ht, const char *key)
 {
     if (*ht && key && !stringEquals(key, "")) {
         int *capacity = &(*ht)->capacity;
@@ -214,11 +214,11 @@ htRemove(Ht **ht, const char *key)
             }
         }
     }
+
     return false;
 }
 
-bool
-htSet(Ht **ht, const char *key, void *value)
+bool htSet(Ht **ht, const char *key, void *value)
 {
     if (*ht && key && !stringEquals(key, "")) {
         int idx = hash((*ht)->capacity, key);
@@ -238,11 +238,11 @@ htSet(Ht **ht, const char *key, void *value)
             }
         }
     }
+
     return false;
 }
 
-HtIterator*
-htGetIterator(Ht *ht)
+HtIterator *htGetIterator(Ht *ht)
 {
     if (ht) {
         HtIterator *htIter = calloc(1, sizeof(HtIterator));
@@ -252,11 +252,11 @@ htGetIterator(Ht *ht)
         htIter->hashItemIdx = -1;
         return htIter;
     }
+
     return NULL;
 }
 
-void*
-htGetNext(HtIterator *htIterator)
+void *htGetNext(HtIterator *htIterator)
 {
     if (htIterator) {
         Ht *ht = htIterator->ht;
@@ -274,11 +274,11 @@ htGetNext(HtIterator *htIterator)
             }
         }
     }
+
     return NULL;
 }
 
-void
-htIteratorReset(Ht *ht, HtIterator *htIterator)
+void htIteratorReset(Ht *ht, HtIterator *htIterator)
 {
     if (htIterator && ht) {
         htIterator->ht = ht;
@@ -287,13 +287,11 @@ htIteratorReset(Ht *ht, HtIterator *htIterator)
     }
 }
 
-void
-htSetDebugData(Ht *ht)
+void htSetDebugData(Ht *ht)
 {
     if (ht) {
         Array *htEntries = ht->htEntries;
-        int collisions, totCollisions, maxCollisionsForEntry, size;
-        collisions = totCollisions = maxCollisionsForEntry = 0;
+        int collisions = 0, totCollisions = 0, maxCollisionsForEntry = 0, size;
         size = htEntries ? htEntries->size : 0;
         for (int i = 0; i < size; i++) {
             HtEntry *htEntry = arrayGet(htEntries, i);

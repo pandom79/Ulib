@@ -8,23 +8,23 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 
 #include "../ulib.h"
 
-static const char *SIZES[]   = { "EB", "PB", "TB", "GB", "MB", "KB", "B" };
-static const off_t EXBIBYTES = 1024ULL * 1024ULL * 1024ULL *
-                               1024ULL * 1024ULL * 1024ULL;
-char*
-stringNew(const char *str)
+static const char *SIZES[] = { "EB", "PB", "TB", "GB", "MB", "KB", "B" };
+static const off_t EXBIBYTES = 1024ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL * 1024ULL;
+
+char *stringNew(const char *str)
 {
     char *ret = NULL;
+
     if (str) {
         ret = calloc(strlen(str) + 1, sizeof(char));
         assert(ret);
         assert(stringCopy(ret, str));
     }
+
     return ret;
 }
 
-bool
-stringSet(char **str, const char *value)
+bool stringSet(char **str, const char *value)
 {
     if (value) {
         if (*str)
@@ -32,28 +32,27 @@ stringSet(char **str, const char *value)
         *str = stringNew(value);
         return true;
     }
+
     return false;
 }
 
-bool
-stringCopy(char *s, const char *src)
+bool stringCopy(char *s, const char *src)
 {
     if (s && src) {
         memset(s, 0, strlen(s));
         if (memmove(s, src, strlen(src)))
             return true;
     }
+
     return false;
 }
 
-const char*
-stringGet(char *str)
+const char *stringGet(char *str)
 {
-    return (const char*)str;
+    return (const char *)str;
 }
 
-bool
-stringStartsWithChr(const char *str, const char c)
+bool stringStartsWithChr(const char *str, const char c)
 {
     if (str && *str == c)
         return true;
@@ -61,8 +60,7 @@ stringStartsWithChr(const char *str, const char c)
     return false;
 }
 
-bool
-stringStartsWithStr(const char *str, const char *searchStr)
+bool stringStartsWithStr(const char *str, const char *searchStr)
 {
     if (str && searchStr && strncmp(str, searchStr, strlen(searchStr)) == 0)
         return true;
@@ -70,8 +68,7 @@ stringStartsWithStr(const char *str, const char *searchStr)
     return false;
 }
 
-bool
-stringEndsWithChr(const char *str, const char c)
+bool stringEndsWithChr(const char *str, const char c)
 {
     if (str && *(str + (strlen(str) - 1)) == c)
         return true;
@@ -79,8 +76,7 @@ stringEndsWithChr(const char *str, const char c)
     return false;
 }
 
-bool
-stringEndsWithStr(const char *str, const char *searchStr)
+bool stringEndsWithStr(const char *str, const char *searchStr)
 {
     int lenStr = str ? strlen(str) : 0;
     int lenSearchStr = searchStr ? strlen(searchStr) : 0;
@@ -88,11 +84,11 @@ stringEndsWithStr(const char *str, const char *searchStr)
         if (strcmp(str + (lenStr - lenSearchStr), searchStr) == 0)
             return true;
     }
+
     return false;
 }
 
-bool
-stringContainsChr(const char *str, const char c)
+bool stringContainsChr(const char *str, const char c)
 {
     if (str && c && strchr(str, c))
         return true;
@@ -100,8 +96,7 @@ stringContainsChr(const char *str, const char c)
     return false;
 }
 
-bool
-stringContainsStr(const char *str, const char *searchStr)
+bool stringContainsStr(const char *str, const char *searchStr)
 {
     if (str && searchStr && strstr(str, searchStr))
         return true;
@@ -109,8 +104,7 @@ stringContainsStr(const char *str, const char *searchStr)
     return false;
 }
 
-void
-stringToupper(char *str)
+void stringToupper(char *str)
 {
     while (*str) {
         *str = toupper((unsigned char)*str);
@@ -118,8 +112,7 @@ stringToupper(char *str)
     }
 }
 
-void
-stringTolower(char *str)
+void stringTolower(char *str)
 {
     while (*str) {
         *str = tolower((unsigned char)*str);
@@ -127,19 +120,16 @@ stringTolower(char *str)
     }
 }
 
-bool
-stringAppendChr(char **a, const char b)
+bool stringAppendChr(char **a, const char b)
 {
     if (a && b) {
         char supp[] = { b, '\0' };
         return stringAppendStr(a, supp);
-    }
-    else
+    } else
         return false;
 }
 
-bool
-stringAppendStr(char **a, const char *b)
+bool stringAppendStr(char **a, const char *b)
 {
     if (a) {
         if (b) {
@@ -151,8 +141,7 @@ stringAppendStr(char **a, const char *b)
             *(*a + lenA + lenB) = '\0';
         }
         return true;
-    }
-    else
+    } else
         return false;
 }
 
@@ -160,18 +149,16 @@ bool stringPrependChr(char **a, const char b)
 {
     if (a && b) {
         char *copyA = stringNew(*a);
-        (*a)[1] = '\0';
         (*a)[0] = b;
+        (*a)[1] = '\0';
         stringAppendStr(a, copyA);
         objectRelease(&copyA);
         return true;
-    }
-    else
+    } else
         return false;
 }
 
-bool
-stringPrependStr(char **a, const char *b)
+bool stringPrependStr(char **a, const char *b)
 {
     if (a && b) {
         char *copyA = stringNew(*a);
@@ -180,13 +167,11 @@ stringPrependStr(char **a, const char *b)
         stringAppendStr(a, copyA);
         objectRelease(&copyA);
         return true;
-    }
-    else
+    } else
         return false;
 }
 
-bool
-stringInsertChrAt(char **a, const char b, int pos)
+bool stringInsertChrAt(char **a, const char b, int pos)
 {
     if (a && b) {
         int len = strlen(*a);
@@ -200,11 +185,11 @@ stringInsertChrAt(char **a, const char b, int pos)
             return true;
         }
     }
+
     return false;
 }
 
-bool
-stringInsertStrAt(char **a, const char *b, int pos)
+bool stringInsertStrAt(char **a, const char *b, int pos)
 {
     if (a && b) {
         int lenA = strlen(*a);
@@ -218,11 +203,11 @@ stringInsertStrAt(char **a, const char *b, int pos)
             return true;
         }
     }
+
     return false;
 }
 
-char*
-stringLtrim(char *str, const char *seps)
+char *stringLtrim(char *str, const char *seps)
 {
     size_t totrim;
     if (seps == NULL) {
@@ -233,16 +218,15 @@ stringLtrim(char *str, const char *seps)
         size_t len = strlen(str);
         if (totrim == len) {
             str[0] = '\0';
-        }
-        else {
+        } else {
             memmove(str, str + totrim, len + 1 - totrim);
         }
     }
+
     return str;
 }
 
-char*
-stringRtrim(char *str, const char *seps)
+char *stringRtrim(char *str, const char *seps)
 {
     int i;
     if (seps == NULL) {
@@ -253,17 +237,16 @@ stringRtrim(char *str, const char *seps)
         str[i] = '\0';
         i--;
     }
+
     return str;
 }
 
-char*
-stringTrim(char *str, const char *seps)
+char *stringTrim(char *str, const char *seps)
 {
     return stringLtrim(stringRtrim(str, seps), seps);
 }
 
-int
-stringIndexOfChr(const char *str, const char c)
+int stringIndexOfChr(const char *str, const char c)
 {
     if (str && c) {
         int len = strlen(str);
@@ -272,11 +255,11 @@ stringIndexOfChr(const char *str, const char c)
                 return i;
         }
     }
+
     return -1;
 }
 
-int
-stringIndexOfStr(const char *str, const char *c)
+int stringIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
         int idx = 0;
@@ -288,11 +271,11 @@ stringIndexOfStr(const char *str, const char *c)
             idx++;
         }
     }
+
     return -1;
 }
 
-int
-stringLastIndexOfChr(const char *str, const char c)
+int stringLastIndexOfChr(const char *str, const char c)
 {
     if (str && c) {
         int index = strlen(str) - 1;
@@ -301,11 +284,11 @@ stringLastIndexOfChr(const char *str, const char c)
                 return index;
         }
     }
+
     return -1;
 }
 
-int
-stringLastIndexOfStr(const char *str, const char *c)
+int stringLastIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
         int lenC = strlen(c);
@@ -319,11 +302,11 @@ stringLastIndexOfStr(const char *str, const char *c)
                 idx--;
         }
     }
+
     return -1;
 }
 
-char*
-stringSub(const char *str, int startIdx, int endIdx)
+char *stringSub(const char *str, int startIdx, int endIdx)
 {
     char *ret = NULL;
     int len = str ? strlen(str) : 0;
@@ -335,11 +318,11 @@ stringSub(const char *str, int startIdx, int endIdx)
             memmove(ret, str + startIdx, numElements);
         }
     }
+
     return ret;
 }
 
-void
-stringReplaceChr(char **str, const char a, const char b)
+void stringReplaceChr(char **str, const char a, const char b)
 {
     if (*str) {
         char *temp = strchr(*str, a);
@@ -348,8 +331,7 @@ stringReplaceChr(char **str, const char a, const char b)
     }
 }
 
-void
-stringReplaceAllChr(char **str, const char a, const char b)
+void stringReplaceAllChr(char **str, const char a, const char b)
 {
     if (*str) {
         char *temp = NULL;
@@ -358,8 +340,7 @@ stringReplaceAllChr(char **str, const char a, const char b)
     }
 }
 
-void
-stringReplaceStr(char **origin, const char *search, const char *replace)
+void stringReplaceStr(char **origin, const char *search, const char *replace)
 {
     char *temp = NULL;
     if (*origin && (temp = strstr(*origin, search)) && replace) {
@@ -372,17 +353,15 @@ stringReplaceStr(char **origin, const char *search, const char *replace)
     }
 }
 
-void
-stringReplaceAllStr(char **origin, const char *search, const char *replace)
+void stringReplaceAllStr(char **origin, const char *search, const char *replace)
 {
     if (*origin && replace) {
         while (strstr(*origin, search))
             stringReplaceStr(origin, search, replace);
-     }
+    }
 }
 
-bool
-stringEquals(const char *s1, const char *s2)
+bool stringEquals(const char *s1, const char *s2)
 {
     if (strcmp(s1, s2) == 0)
         return true;
@@ -390,8 +369,7 @@ stringEquals(const char *s1, const char *s2)
         return false;
 }
 
-bool
-stringEqualsN(const char *s1, const char *s2, size_t n)
+bool stringEqualsN(const char *s1, const char *s2, size_t n)
 {
     if (strncmp(s1, s2, n) == 0)
         return true;
@@ -399,8 +377,7 @@ stringEqualsN(const char *s1, const char *s2, size_t n)
         return false;
 }
 
-bool
-stringEqualsIgnCase(const char *s1, const char *s2)
+bool stringEqualsIgnCase(const char *s1, const char *s2)
 {
     if (strcasecmp(s1, s2) == 0)
         return true;
@@ -408,8 +385,7 @@ stringEqualsIgnCase(const char *s1, const char *s2)
         return false;
 }
 
-bool
-stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
+bool stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
 {
     if (strncasecmp(s1, s2, n) == 0)
         return true;
@@ -417,8 +393,7 @@ stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
         return false;
 }
 
-void
-objectRelease(void **element)
+void objectRelease(void **element)
 {
     if (*element) {
         free(*element);
@@ -426,11 +401,10 @@ objectRelease(void **element)
     }
 }
 
-/* We split all the occurrences of "sep" getting an array with n elements,
+/* We split all the occurrences of "sep" getting an array with n elements.
  * The elements can be allocated or not according "allocElements" parameter value
 */
-Array*
-stringSplit(char *str, const char *sep, bool allocElements)
+Array *stringSplit(char *str, const char *sep, bool allocElements)
 {
     if (str && sep && strstr(str, sep)) {
         Array *array = allocElements ? arrayNew(objectRelease) : arrayNew(NULL);
@@ -445,11 +419,11 @@ stringSplit(char *str, const char *sep, bool allocElements)
         } while ((element = strtok(NULL, sep)));
         return array;
     }
+
     return NULL;
 }
 
-Array*
-stringSplitOnce(char *str, const char *sep)
+Array *stringSplitOnce(char *str, const char *sep)
 {
     int idx = -1;
     if (str && sep && (idx = stringIndexOfStr(str, sep)) != -1) {
@@ -460,30 +434,30 @@ stringSplitOnce(char *str, const char *sep)
         arrayAdd(array, value);
         return array;
     }
+
     return NULL;
 }
 
-char*
-stringGetFileSize(off_t fileSize)
+char *stringGetFileSize(off_t fileSize)
 {
     if (fileSize > -1) {
         char *result = calloc(20, sizeof(char));
         assert(result);
         off_t multiplier = EXBIBYTES;
         int i;
-        for (i = 0; i < 7; i++, multiplier /= 1024)
-        {
+        for (i = 0; i < 7; i++, multiplier /= 1024) {
             if (fileSize < multiplier)
                 continue;
             if (fileSize % multiplier == 0)
                 sprintf(result, "%" PRIu64 "%s", fileSize / multiplier, SIZES[i]);
             else
-                sprintf(result, "%.1f%s", (float) fileSize / multiplier, SIZES[i]);
+                sprintf(result, "%.1f%s", (float)fileSize / multiplier, SIZES[i]);
             stringReplaceChr(&result, '.', ',');
             return result;
         }
         assert(stringCopy(result, "0B"));
         return result;
     }
+
     return NULL;
 }

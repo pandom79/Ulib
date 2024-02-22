@@ -7,5 +7,6 @@ int main()
     int idx = stringLastIndexOfStr(test, "Hello");
     if (idx == 20)
         rv = 0;
+
     return rv;
 }

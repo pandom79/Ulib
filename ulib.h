@@ -207,7 +207,7 @@ typedef struct {
  * @param[in] src
  * @return src copy
  */
-char* stringNew(const char *src);
+char *stringNew(const char *src);
 
 /**
  * Return true if a copy of 'src' string is set into 's' string, false otherwise.<br>
@@ -232,7 +232,7 @@ bool stringCopy(char *s, const char *src);
  * @param[in] str
  * @return const char *str
  */
-const char* stringGet(char *str);
+const char *stringGet(char *str);
 
 /**
  * Return true if 'src' string starts with 'c' character, false otherwise.
@@ -359,7 +359,7 @@ bool stringInsertStrAt(char **str1, const char *str2, int idx);
  * @param[in] sep
  * @return str
  */
-char* stringLtrim(char *str, const char *sep);
+char *stringLtrim(char *str, const char *sep);
 
 /**
  * Remove from 'str' string the characters defined in 'sep' string starting from right.<br>
@@ -374,7 +374,7 @@ char* stringLtrim(char *str, const char *sep);
  * @param[in] sep
  * @return str
  */
-char* stringRtrim(char *str, const char *sep);
+char *stringRtrim(char *str, const char *sep);
 
 /**
  * Remove from 'str' string the characters defined in 'sep' string in both left and right.<br>
@@ -389,7 +389,7 @@ char* stringRtrim(char *str, const char *sep);
  * @param[in] sep
  * @return str
  */
-char* stringTrim(char *str, const char *sep);
+char *stringTrim(char *str, const char *sep);
 
 /**
  * Return the index of 'c' character from 'str' string, -1 otherwise.
@@ -433,7 +433,7 @@ int stringLastIndexOfStr(const char *str1, const char *str2);
  * @param[in] endIdx
  * @return substring of str
  */
-char* stringSub(const char *str, int startIdx, int endIdx);
+char *stringSub(const char *str, int startIdx, int endIdx);
 
 /**
  * Replace the first occurrence of the 'c1' character with 'c2' character into 'str' string.
@@ -522,7 +522,7 @@ void objectRelease(void **ptr);
  * @param[in] alloc
  * @return Array
  */
-Array* stringSplit(char *str, const char *token, bool alloc);
+Array *stringSplit(char *str, const char *token, bool alloc);
 
 /**
  * Return an array of two elements splitting once 'str' string using 'token' string as a delimiter.<br>
@@ -532,7 +532,7 @@ Array* stringSplit(char *str, const char *token, bool alloc);
  * @param[in] token
  * @return Array
  */
-Array* stringSplitOnce(char *str, const char *token);
+Array *stringSplitOnce(char *str, const char *token);
 
 /**
  * Return a string which represents the size of a resource.<br>
@@ -541,7 +541,7 @@ Array* stringSplitOnce(char *str, const char *token);
  * @param[in] size
  * @return char*
  */
-char* stringGetFileSize(off_t size);
+char *stringGetFileSize(off_t size);
 
 // ARRAY
 
@@ -555,7 +555,7 @@ char* stringGetFileSize(off_t size);
  * @param[in] releaseFn
  * @return Array
  */
-Array* arrayNew(void (*releaseFn)(void **));
+Array *arrayNew(void (*releaseFn)(void **));
 
 /**
  * Return an array of a number of elements given by 'amount' parameter value.<br>
@@ -568,7 +568,7 @@ Array* arrayNew(void (*releaseFn)(void **));
  * @param[in] releaseFn
  * @return Array
  */
-Array* arrayNewWithAmount(int amount, void (*releaseFn)(void **));
+Array *arrayNewWithAmount(int amount, void (*releaseFn)(void **));
 
 /**
  * Return true if a generic 'ptr' pointer is added to 'arr' array, false otherwise.
@@ -634,7 +634,7 @@ bool arrayContainsStr(Array *arr, const char *str);
  * @param[in] arr
  * @return Array
  */
-Array* arrayStrCopy(Array *arr);
+Array *arrayStrCopy(Array *arr);
 
 /**
  * Return a generic pointer to the array element at the 'idx' position, NULL otherwise.
@@ -642,7 +642,7 @@ Array* arrayStrCopy(Array *arr);
  * @param[in] idx
  * @return generic pointer
  */
-void* arrayGet(Array *arr, int idx);
+void *arrayGet(Array *arr, int idx);
 
 /**
  * Return the element's index of the array, -1 otherwise.
@@ -669,7 +669,7 @@ int msleep(long ms);
  * @param[in] time
  * @return Time
  */
-Time* timeNew(Time *time);
+Time *timeNew(Time *time);
 
 /**
  * Set into 'time1' parameter a copy of the 'time2' parameter.<br>
@@ -694,7 +694,7 @@ void timeRelease(Time **time);
  * @param[in] format
  * @return char*
  */
-char* stringGetTimeStamp(Time *time, bool hasMillisec, const char *format);
+char *stringGetTimeStamp(Time *time, bool hasMillisec, const char *format);
 
 /**
  * Return a string which represents the elapsed time between 'timeEnd' and 'timeStart'.
@@ -702,7 +702,7 @@ char* stringGetTimeStamp(Time *time, bool hasMillisec, const char *format);
  * @param[in] timeStart
  * @return char*
  */
-char* stringGetDiffTime(Time *timeEnd, Time *timeStart);
+char *stringGetDiffTime(Time *timeEnd, Time *timeStart);
 
 // HASHTABLE
 
@@ -720,7 +720,7 @@ char* stringGetDiffTime(Time *timeEnd, Time *timeStart);
  * @param[in] releaseFn
  * @return Ht
  */
-Ht* htNew(int initialCapacity, void (*releaseFn)(void **));
+Ht *htNew(int initialCapacity, void (*releaseFn)(void **));
 
 /**
  * Free an Ht structure.<br>
@@ -736,7 +736,7 @@ void htRelease(Ht **ht);
  * @param[in] key
  * @return void*
  */
-void* htGet(Ht *ht, const char *key);
+void *htGet(Ht *ht, const char *key);
 
 /**
  * Return true if a generic 'value' pointer is added
@@ -778,14 +778,14 @@ void htSetDebugData(Ht *ht);
  * @param[in] ht
  * @return HtIterator*
  */
-HtIterator* htGetIterator(Ht *ht);
+HtIterator *htGetIterator(Ht *ht);
 
 /**
  * Return the value of the next hash table key, NULL if the iterator is terminated.
  * @param[in] htIterator
  * @return void*
  */
-void* htGetNext(HtIterator *htIterator);
+void *htGetNext(HtIterator *htIterator);
 
 /**
  * Reset the hash table iterator for the next iteration cycle.
@@ -803,7 +803,8 @@ void htIteratorReset(Ht *ht, HtIterator *htIterator);
  * @param[in] propertiesLen
  * @param[in] propertyItems[]
  */
-void parserInit(int sectionsLen, SectionData sectionItems[], int propertiesLen, PropertyData propertyItems[]);
+void parserInit(int sectionsLen, SectionData sectionItems[], int propertiesLen,
+                PropertyData propertyItems[]);
 
 /**
  * Parse the file line.
@@ -814,7 +815,8 @@ void parserInit(int sectionsLen, SectionData sectionItems[], int propertiesLen, 
  * @param[in] propertyData
  * @return integer
  */
-int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, PropertyData **propertyData);
+int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData,
+              PropertyData **propertyData);
 
 /**
  * Get the message replacing the arguments into it.
@@ -823,7 +825,7 @@ int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData
  * @param[in] ...
  * @return char*
  */
-char* getMsg(int numLine, const char *message, ...);
+char *getMsg(int numLine, const char *message, ...);
 
 /**
  * Check the required data for the current section when the latter is configured as repeatable.

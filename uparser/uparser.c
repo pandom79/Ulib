@@ -9,12 +9,10 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 #include "uparser.h"
 
 static int SECTION_CURRENT = NO_SECTION;
-
 static int PARSER_SECTIONS_ITEMS_LEN;
 static SectionData *PARSER_SECTIONS_ITEMS;
 static int PARSER_PROPERTIES_ITEMS_LEN;
 static PropertyData *PARSER_PROPERTIES_ITEMS;
-
 static ErrorsData ERRORS_ITEMS[] = {
     { FIRST_CHARACTER_ERR, "An invalid character was found at the beginning of the line!" },
     { UNRECOGNIZED_ERR, "Unrecognized data '%s'!" },
@@ -27,17 +25,17 @@ static ErrorsData ERRORS_ITEMS[] = {
     { EMPTY_VALUE_ERR, "The '%s' property has an empty value!" },
 };
 
-void
-parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen, PropertyData propertiesItems[])
+void parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen,
+                PropertyData propertiesItems[])
 {
     PARSER_SECTIONS_ITEMS_LEN = sectionsLen;
     PARSER_SECTIONS_ITEMS = sectionsItems;
     PARSER_PROPERTIES_ITEMS_LEN = propertiesLen;
     PARSER_PROPERTIES_ITEMS = propertiesItems;
-
     PropertyData *propertyData = NULL;
-    /* Reset all */
     int i;
+
+    /* Reset all */
     for (i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
         PARSER_SECTIONS_ITEMS[i].count = 0;
     }
@@ -49,8 +47,7 @@ parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen, Prop
     }
 }
 
-int
-parserCheckCurSec(Array **errors, bool isAggregate)
+int parserCheckCurSec(Array **errors, bool isAggregate)
 {
     int rv = 0;
     if (PARSER_SECTIONS_ITEMS[SECTION_CURRENT].count > 1) {
@@ -60,7 +57,7 @@ parserCheckCurSec(Array **errors, bool isAggregate)
             if (propertyData->idSection == SECTION_CURRENT) {
                 if (propertyData->required && propertyData->propertyCount == 0) {
                     arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
-                                      propertyData->property.desc, "property"));
+                                             propertyData->property.desc, "property"));
                     if (!isAggregate)
                         rv = 1;
                 }
@@ -68,26 +65,27 @@ parserCheckCurSec(Array **errors, bool isAggregate)
             }
         }
     }
+
     return rv;
 }
 
-void
-parserEnd(Array **errors, bool isAggregate)
+void parserEnd(Array **errors, bool isAggregate)
 {
     SectionData *sectionData = NULL;
     PropertyData *propertyData = NULL;
-    int i;
+    int i = 0;
 
     if (!(*errors))
         *errors = arrayNew(objectRelease);
     if ((*errors)->size > 0 && !isAggregate)
         return;
+
     /* Check required section */
     for (i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
         sectionData = &PARSER_SECTIONS_ITEMS[i];
         if (sectionData->required && sectionData->count == 0) {
             arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
-                                       sectionData->section.desc, "section"));
+                                     sectionData->section.desc, "section"));
             if (!isAggregate)
                 return;
             else
@@ -99,7 +97,7 @@ parserEnd(Array **errors, bool isAggregate)
         propertyData = &PARSER_PROPERTIES_ITEMS[i];
         if (propertyData->required && propertyData->propertyCount == 0) {
             arrayAdd(*errors, getMsg(-1, ERRORS_ITEMS[REQUIRED_VALUE_ERR].desc,
-                                       propertyData->property.desc, "property"));
+                                     propertyData->property.desc, "property"));
             if (!isAggregate)
                 return;
             else
@@ -108,12 +106,11 @@ parserEnd(Array **errors, bool isAggregate)
     }
 }
 
-char*
-getMsg(int numLine, const char *message, ...)
+char *getMsg(int numLine, const char *message, ...)
 {
     char *error = NULL;
-    char numLineStr[1000] = {0};
-    char replacedMess[1000] = {0};
+    char numLineStr[1000] = { 0 };
+    char replacedMess[1000] = { 0 };
 
     assert(message);
 
@@ -125,8 +122,7 @@ getMsg(int numLine, const char *message, ...)
         vsprintf(replacedMess, message, args);
         stringAppendStr(&error, numLineStr);
         stringAppendStr(&error, replacedMess);
-    }
-    else {
+    } else {
         vsprintf(replacedMess, message, args);
         error = stringNew(replacedMess);
     }
@@ -135,37 +131,33 @@ getMsg(int numLine, const char *message, ...)
     return error;
 }
 
-int
-parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, PropertyData **propertyData)
+int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData,
+              PropertyData **propertyData)
 {
     int rv = 0;
-    char *key, *value, *error;
-    key = value = error = NULL;
+    char *key = NULL, *value = NULL, *error = NULL;
 
     assert(line);
     assert(numLine);
-    if (line) {
-        /* ignore comments or empty lines */
-        if (*line == '#' || *line == '\n')
-            return rv;
 
-        /* Split */
-        *keyVal = stringSplitOnce(line, "=");
-        if (!(*keyVal)) {
-            *keyVal = arrayNew(objectRelease);
-            /* Adding only the key which represents a Section */
-            arrayAdd(*keyVal, stringNew(line));
-            arrayAdd(*keyVal, NULL);
-        }
-        key = arrayGet(*keyVal, 0);
-        value = arrayGet(*keyVal, 1);
-        /* Right trim to intercept the eventual FIRST_CHARACTER_ERR error */
-        stringRtrim(key, NULL);
-        /* Trim */
-        if (value)
-            stringTrim(value, NULL);
+    /* ignore comments or empty lines */
+    if (*line == '#' || *line == '\n')
+        return rv;
+    /* Split */
+    *keyVal = stringSplitOnce(line, "=");
+    if (!(*keyVal)) {
+        *keyVal = arrayNew(objectRelease);
+        /* Adding only the key which represents a Section */
+        arrayAdd(*keyVal, stringNew(line));
+        arrayAdd(*keyVal, NULL);
     }
-
+    key = arrayGet(*keyVal, 0);
+    value = arrayGet(*keyVal, 1);
+    /* Right trim to intercept an eventual FIRST_CHARACTER_ERR error */
+    stringRtrim(key, NULL);
+    /* Trim */
+    if (value)
+        stringTrim(value, NULL);
     /* Check key and value */
     if ((error = checkKeyVal(key, value, numLine, sectionData, propertyData))) {
         arrayAdd(*keyVal, error);
@@ -175,31 +167,29 @@ parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData, Pr
     return rv;
 }
 
-char*
-checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, PropertyData **propertyData)
+char *checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData,
+                  PropertyData **propertyData)
 {
     char *error = NULL;
-    bool found, valueFound, isDuplicate;
+    bool found = false, valueFound = false, isDuplicate = false;
     SectionData *currentSectionData = NULL;
     PropertyData *currentPropertyData = NULL;
     const char **acceptedValues = NULL;
     Array *notDupValues = NULL;
     int size = 0;
 
-    found = valueFound = isDuplicate = false;
-
     assert(numLine);
     assert(key);
+
     /* Sections and Properties can't start with blank or tab */
     if (isblank((unsigned char)*key) || *key == '\t') {
         error = getMsg(numLine, ERRORS_ITEMS[FIRST_CHARACTER_ERR].desc);
         return error;
     }
-
     /* Check section name */
     if (!value) {
         for (int i = 0; i < PARSER_SECTIONS_ITEMS_LEN; i++) {
-            currentSectionData =  &PARSER_SECTIONS_ITEMS[i];
+            currentSectionData = &PARSER_SECTIONS_ITEMS[i];
             if (stringEquals(key, currentSectionData->section.desc)) {
                 *sectionData = currentSectionData;
                 /* Setting the current section */
@@ -210,8 +200,7 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
                 break;
             }
         }
-    }
-    else {
+    } else {
         /* Check property name */
         for (int i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
             currentPropertyData = &PARSER_PROPERTIES_ITEMS[i];
@@ -228,18 +217,15 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
         error = getMsg(numLine, ERRORS_ITEMS[UNRECOGNIZED_ERR].desc, key, NULL);
         return error;
     }
-
     /* We assert that it is a section or a property.
      * Both isn't possible!!
     */
     assert((currentSectionData && !currentPropertyData) ||
            (!currentSectionData && currentPropertyData));
-
     /* Check the occurrences number about the section */
     if (currentSectionData) {
         if (!currentSectionData->repeatable && currentSectionData->count > 1) {
-            error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc,
-                             key, "section");
+            error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc, key, "section");
             return error;
         }
     }
@@ -250,28 +236,22 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
          */
         if (SECTION_CURRENT != NO_SECTION && SECTION_CURRENT != currentPropertyData->idSection) {
             error = getMsg(numLine, ERRORS_ITEMS[PROPERTY_SECTION_ERR].desc,
-                             PARSER_SECTIONS_ITEMS[SECTION_CURRENT].section.desc,
-                             key);
+                           PARSER_SECTIONS_ITEMS[SECTION_CURRENT].section.desc, key);
             return error;
-        }
-        else {
+        } else {
             /* Check the occurrences number about the property */
             if (!currentPropertyData->repeatable && currentPropertyData->propertyCount > 1) {
-                error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc,
-                                 key, "property");
+                error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc, key, "property");
                 return error;
-            }
-            else {
+            } else {
                 /* Check empty value */
                 if (stringEquals(value, "")) {
-                    error = getMsg(numLine, ERRORS_ITEMS[EMPTY_VALUE_ERR].desc,
-                                   key);
+                    error = getMsg(numLine, ERRORS_ITEMS[EMPTY_VALUE_ERR].desc, key);
                     return error;
                 }
                 /* Check if a property is a number */
                 if (currentPropertyData->numeric && !isValidNumber(value, false)) {
-                    error = getMsg(numLine, ERRORS_ITEMS[NUMERIC_ERR].desc,
-                                     key);
+                    error = getMsg(numLine, ERRORS_ITEMS[NUMERIC_ERR].desc, key);
                     return error;
                 }
                 /* Check if the property has the default values */
@@ -284,8 +264,8 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
                         acceptedValues++;
                     }
                     if (!valueFound) {
-                        error = getMsg(numLine, ERRORS_ITEMS[ACCEPTED_VALUE_ERR].desc,
-                                         value, currentPropertyData->property.desc);
+                        error = getMsg(numLine, ERRORS_ITEMS[ACCEPTED_VALUE_ERR].desc, value,
+                                       currentPropertyData->property.desc);
                         return error;
                     }
                 }
@@ -300,7 +280,7 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
                     }
                     if (isDuplicate) {
                         error = getMsg(numLine, ERRORS_ITEMS[DUPLICATE_VALUE_ERR].desc,
-                                         currentPropertyData->property.desc);
+                                       currentPropertyData->property.desc);
                     }
                 }
             }
@@ -310,8 +290,7 @@ checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData, Prop
     return error;
 }
 
-bool
-isValidNumber(const char *value, bool zeroIncluded)
+bool isValidNumber(const char *value, bool zeroIncluded)
 {
     if (value) {
         int len = strlen(value);
@@ -322,5 +301,6 @@ isValidNumber(const char *value, bool zeroIncluded)
         if ((!zeroIncluded && atol(value) <= 0) || (zeroIncluded && atol(value) < 0))
             return false;
     }
+
     return true;
 }
