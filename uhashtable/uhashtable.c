@@ -203,7 +203,7 @@ bool htRemove(Ht **ht, const char *key)
                     else
                         arrayRemove(*htItems, htItem);
                     (*ht)->numOfItems--;
-                    /* check threshold */
+                    /* Check threshold */
                     if (*capacity > (*ht)->initialCapacity) {
                         int threshold = *capacity / 4;
                         if ((*ht)->numOfItems <= threshold)

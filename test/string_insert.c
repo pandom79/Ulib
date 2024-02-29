@@ -4,15 +4,15 @@ int main()
 {
     int rv = 0;
 
-    printf("Test append chr\n");
+    printf("Test insert chr\n");
     char *test = stringNew("Test");
-    stringAppendChr(&test, 'A');
+    stringInsertChrAt(&test, 'A', 2);
     printf("Test = %s\n", test);
     objectRelease(&test);
 
-    printf("\nTest append str\n");
+    printf("Test insert str\n");
     test = stringNew("Test");
-    stringAppendStr(&test, "AAAA");
+    stringInsertStrAt(&test, "AAA", 2);
     printf("Test = %s\n", test);
     objectRelease(&test);
 

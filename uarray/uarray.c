@@ -101,7 +101,6 @@ bool arrayRemove(Array *array, void *element)
         void (*releaseFn)(void **) = array->releaseFn;
         for (int i = 0; i < *size; i++) {
             if (arr[i] == element) {
-                /* Clean the item */
                 if (releaseFn)
                     (*releaseFn)(&element);
                 if (i < (*size - 1))

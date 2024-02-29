@@ -21,11 +21,14 @@
  *
 */
 
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
 #include <string.h>
+#include <strings.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/time.h>
@@ -452,20 +455,23 @@ void stringReplaceChr(char **str, const char c1, const char c2);
 void stringReplaceAllChr(char **str, const char c1, const char c2);
 
 /**
- * Replace the first occurrence of the 'str2' string with 'str3' string into 'str1' string.
+ * Return true if the first occurrence of the 'str2' string is replaced by 'str3' string <br>
+ * into 'str1' string, false otherwise.
  * @param[in] str1
  * @param[in] str2
  * @param[in] str3
+ * @return true/false
  */
-void stringReplaceStr(char **str1, const char *str2, const char *str3);
+bool stringReplaceStr(char **str1, const char *str2, const char *str3);
 
 /**
- * Replace all the occurrences of the 'str2' string with 'str3' string into 'str1' string.
+ * Return true if at least one occurrence of the 'str2' string is replaced by 'str3' string <br>
+ * into 'str1' string, false otherwise.
  * @param[in] str1
  * @param[in] str2
  * @param[in] str3
  */
-void stringReplaceAllStr(char **str1, const char *str2, const char *str3);
+bool stringReplaceAllStr(char **str1, const char *str2, const char *str3);
 
 /**
  * Return true if 'str1' is equals to 'str2', false otherwise.<br>

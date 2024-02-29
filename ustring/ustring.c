@@ -122,68 +122,58 @@ void stringTolower(char *str)
 
 bool stringAppendChr(char **a, const char b)
 {
-    if (a && b) {
-        char supp[] = { b, '\0' };
-        return stringAppendStr(a, supp);
-    } else
-        return false;
+    if (*a && b) {
+        char temp[] = { b, '\0' };
+        return stringAppendStr(a, temp);
+    }
+
+    return false;
 }
 
 bool stringAppendStr(char **a, const char *b)
 {
-    if (a) {
-        if (b) {
-            int lenA = strlen(*a);
-            int lenB = strlen(b);
-            *a = realloc(*a, (lenA + lenB + 1) * sizeof(char));
-            assert(*a);
-            memmove(*a + lenA, b, lenB);
-            *(*a + lenA + lenB) = '\0';
-        }
+    if (*a && b) {
+        int lenA = strlen(*a), lenB = strlen(b);
+        *a = realloc(*a, (lenA + lenB + 1) * sizeof(char));
+        assert(*a);
+        memmove(*a + lenA, b, lenB);
+        *(*a + lenA + lenB) = '\0';
         return true;
-    } else
-        return false;
+    }
+
+    return false;
 }
 
 bool stringPrependChr(char **a, const char b)
 {
-    if (a && b) {
-        char *copyA = stringNew(*a);
-        (*a)[0] = b;
-        (*a)[1] = '\0';
-        stringAppendStr(a, copyA);
-        objectRelease(&copyA);
-        return true;
-    } else
-        return false;
+    if (*a && b) {
+        char temp[] = { b, '\0' };
+        return stringPrependStr(a, temp);
+    }
+
+    return false;
 }
 
 bool stringPrependStr(char **a, const char *b)
 {
-    if (a && b) {
-        char *copyA = stringNew(*a);
-        **a = '\0';
-        stringAppendStr(a, b);
-        stringAppendStr(a, copyA);
-        objectRelease(&copyA);
+    if (*a && b) {
+        int lenA = strlen(*a), lenB = strlen(b);
+        *a = realloc(*a, (lenA + lenB + 1) * sizeof(char));
+        assert(*a);
+        memmove(*a + lenB, *a, lenA);
+        memmove(*a, b, lenB);
+        *(*a + lenA + lenB) = '\0';
         return true;
-    } else
-        return false;
+    }
+
+    return false;
 }
 
 bool stringInsertChrAt(char **a, const char b, int pos)
 {
-    if (a && b) {
-        int len = strlen(*a);
-        if (pos >= 0 && pos <= len) {
-            char *copyA = stringNew(*a);
-            char supp[] = { b, '\0' };
-            (*a)[pos] = '\0';
-            memmove(*a + pos, supp, strlen(supp));
-            memmove(*a + pos + 1, copyA + pos, strlen(copyA) - pos);
-            objectRelease(&copyA);
-            return true;
-        }
+    if (*a && b) {
+        char temp[] = { b, '\0' };
+        return stringInsertStrAt(a, temp, pos);
     }
 
     return false;
@@ -191,15 +181,14 @@ bool stringInsertChrAt(char **a, const char b, int pos)
 
 bool stringInsertStrAt(char **a, const char *b, int pos)
 {
-    if (a && b) {
-        int lenA = strlen(*a);
-        int lenB = strlen(b);
+    if (*a && b) {
+        int lenA = strlen(*a), lenB = strlen(b);
         if (pos >= 0 && pos <= lenA) {
-            char *copyA = stringNew(*a);
-            (*a)[pos] = '\0';
+            *a = realloc(*a, (lenA + lenB + 1) * sizeof(char));
+            assert(*a);
+            memmove(*a + pos + lenB, *a + pos, lenA - pos);
             memmove(*a + pos, b, lenB);
-            memmove(*a + pos + lenB, copyA + pos, lenA - pos);
-            objectRelease(&copyA);
+            *(*a + lenA + lenB) = '\0';
             return true;
         }
     }
@@ -210,6 +199,7 @@ bool stringInsertStrAt(char **a, const char *b, int pos)
 char *stringLtrim(char *str, const char *seps)
 {
     size_t totrim;
+
     if (seps == NULL) {
         seps = "\t\n\v\f\r ";
     }
@@ -229,6 +219,7 @@ char *stringLtrim(char *str, const char *seps)
 char *stringRtrim(char *str, const char *seps)
 {
     int i;
+
     if (seps == NULL) {
         seps = "\t\n\v\f\r ";
     }
@@ -262,8 +253,7 @@ int stringIndexOfChr(const char *str, const char c)
 int stringIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
-        int idx = 0;
-        int lenC = strlen(c);
+        int idx = 0, lenC = strlen(c);
         while (*str) {
             if (strncmp(str, c, lenC) == 0)
                 return idx;
@@ -291,9 +281,7 @@ int stringLastIndexOfChr(const char *str, const char c)
 int stringLastIndexOfStr(const char *str, const char *c)
 {
     if (str && c) {
-        int lenC = strlen(c);
-        int lenStr = strlen(str);
-        int idx = lenStr - 1;
+        int lenC = strlen(c), lenStr = strlen(str), idx = lenStr - 1;
         str += lenStr;
         while (*(--str)) {
             if (strncmp(str, c, lenC) == 0)
@@ -310,6 +298,7 @@ char *stringSub(const char *str, int startIdx, int endIdx)
 {
     char *ret = NULL;
     int len = str ? strlen(str) : 0;
+
     if (len > 0 && startIdx >= 0 && endIdx >= 0 && endIdx < len) {
         int numElements = (endIdx - startIdx) + 1;
         if (numElements > 0) {
@@ -340,57 +329,57 @@ void stringReplaceAllChr(char **str, const char a, const char b)
     }
 }
 
-void stringReplaceStr(char **origin, const char *search, const char *replace)
+bool stringReplaceStr(char **source, const char *search, const char *replace)
 {
-    char *temp = NULL;
-    if (*origin && (temp = strstr(*origin, search)) && replace) {
-        char *copyOrigin = stringNew(*origin);
-        int index = temp - *origin;
-        (*origin)[index] = '\0';
-        stringAppendStr(origin, replace);
-        stringAppendStr(origin, copyOrigin + index + strlen(search));
-        objectRelease(&copyOrigin);
+    int idx = -1;
+
+    if (*source && replace && (idx = stringIndexOfStr(*source, search)) != -1) {
+        int lenSource = strlen(*source), lenSearch = strlen(search), lenReplace = strlen(replace);
+        char *ret = calloc(lenSource + lenReplace, sizeof(char));
+        assert(ret);
+        memmove(ret, *source, idx);
+        memmove(ret + idx, replace, lenReplace);
+        memmove(ret + idx + lenReplace, *source + idx + lenSearch, lenSource - (idx + lenSearch));
+        objectRelease(source);
+        *source = ret;
+        return true;
     }
+
+    return false;
 }
 
-void stringReplaceAllStr(char **origin, const char *search, const char *replace)
+bool stringReplaceAllStr(char **origin, const char *search, const char *replace)
 {
-    if (*origin && replace) {
-        while (strstr(*origin, search))
-            stringReplaceStr(origin, search, replace);
+    bool ret = false;
+
+    while (true) {
+        if (stringReplaceStr(origin, search, replace))
+            ret = true;
+        else
+            break;
     }
+
+    return ret;
 }
 
 bool stringEquals(const char *s1, const char *s2)
 {
-    if (strcmp(s1, s2) == 0)
-        return true;
-    else
-        return false;
+    return strcmp(s1, s2) == 0 ? true : false;
 }
 
 bool stringEqualsN(const char *s1, const char *s2, size_t n)
 {
-    if (strncmp(s1, s2, n) == 0)
-        return true;
-    else
-        return false;
+    return strncmp(s1, s2, n) == 0 ? true : false;
 }
 
 bool stringEqualsIgnCase(const char *s1, const char *s2)
 {
-    if (strcasecmp(s1, s2) == 0)
-        return true;
-    else
-        return false;
+    return strcasecmp(s1, s2) == 0 ? true : false;
 }
 
 bool stringEqualsIgnCaseN(const char *s1, const char *s2, size_t n)
 {
-    if (strncasecmp(s1, s2, n) == 0)
-        return true;
-    else
-        return false;
+    return strncasecmp(s1, s2, n) == 0 ? true : false;
 }
 
 void objectRelease(void **element)
@@ -401,9 +390,6 @@ void objectRelease(void **element)
     }
 }
 
-/* We split all the occurrences of "sep" getting an array with n elements.
- * The elements can be allocated or not according "allocElements" parameter value
-*/
 Array *stringSplit(char *str, const char *sep, bool allocElements)
 {
     if (str && sep && strstr(str, sep)) {
