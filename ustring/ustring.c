@@ -411,14 +411,20 @@ Array *stringSplit(char *str, const char *sep, bool allocElements)
 
 Array *stringSplitOnce(char *str, const char *sep)
 {
-    int idx = -1;
-    if (str && sep && (idx = stringIndexOfStr(str, sep)) != -1) {
-        Array *array = arrayNew(objectRelease);
-        char *key = stringSub(str, 0, idx - 1);
-        char *value = stringSub(str, idx + strlen(sep), strlen(str) - 1);
-        arrayAdd(array, key);
-        arrayAdd(array, value);
-        return array;
+    if (str && sep) {
+        char *value = NULL;
+        if ((value = strstr(str, sep))) {
+            int lenSep = strlen(sep);
+            value = stringNew(value + lenSep);
+            int size = strlen(str) - strlen(value) - lenSep + 1;
+            char *key = calloc(size, sizeof(char));
+            assert(key);
+            memmove(key, str, size - 1);
+            Array *array = arrayNew(objectRelease);
+            arrayAdd(array, key);
+            arrayAdd(array, value);
+            return array;
+        }
     }
 
     return NULL;
