@@ -286,11 +286,14 @@ int stringLastIndexOfStr(const char *str, const char *c)
         while (*(--str)) {
             if (strncmp(str, c, lenC) == 0)
                 return idx;
-            else
+            else {
                 idx--;
+                if (idx == -1)
+                    goto out;
+            }
         }
     }
-
+out:
     return -1;
 }
 
