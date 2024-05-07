@@ -239,7 +239,7 @@ char *stringTrim(char *str, const char *seps)
 
 int stringIndexOfChr(const char *str, const char c)
 {
-    if (str && c) {
+    if (str && !stringEquals(str, "") && c) {
         int len = strlen(str);
         for (int i = 0; i < len; i++) {
             if (str[i] == c)
@@ -252,7 +252,7 @@ int stringIndexOfChr(const char *str, const char c)
 
 int stringIndexOfStr(const char *str, const char *c)
 {
-    if (str && c) {
+    if (str && !stringEquals(str, "") && c && !stringEquals(c, "")) {
         int idx = 0, lenC = strlen(c);
         while (*str) {
             if (strncmp(str, c, lenC) == 0)
@@ -267,7 +267,7 @@ int stringIndexOfStr(const char *str, const char *c)
 
 int stringLastIndexOfChr(const char *str, const char c)
 {
-    if (str && c) {
+    if (str && !stringEquals(str, "") && c) {
         int index = strlen(str) - 1;
         for (; index >= 0; index--) {
             if (str[index] == c)
@@ -280,7 +280,7 @@ int stringLastIndexOfChr(const char *str, const char c)
 
 int stringLastIndexOfStr(const char *str, const char *c)
 {
-    if (str && c) {
+    if (str && !stringEquals(str, "") && c && !stringEquals(c, "")) {
         int lenC = strlen(c), lenStr = strlen(str), idx = lenStr - 1;
         str += lenStr;
         while (*(--str)) {
