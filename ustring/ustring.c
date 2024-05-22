@@ -38,11 +38,8 @@ bool stringSet(char **str, const char *value)
 
 bool stringCopy(char *s, const char *src)
 {
-    if (s && src) {
-        memset(s, 0, strlen(s));
-        if (memmove(s, src, strlen(src)))
-            return true;
-    }
+    if (s && src && memmove(s, src, strlen(src)))
+        return true;
 
     return false;
 }
