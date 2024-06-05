@@ -36,17 +36,26 @@ bool stringSet(char **str, const char *value)
     return false;
 }
 
-bool stringCopy(char *s, const char *src)
+static bool _stringCopy(char *s, const char *src, int n)
 {
     if (s && src) {
-        int lenSrc = strlen(src);
-        for (int i = 0; i < lenSrc; i++)
+        for (int i = 0; i < n; i++)
             s[i] = src[i];
-        s[lenSrc] = '\0';
+        s[n] = '\0';
         return true;
     }
 
     return false;
+}
+
+bool stringCopy(char *s, const char *src)
+{
+    return _stringCopy(s, src, strlen(src));
+}
+
+bool stringCopyN(char *s, const char *src, int n)
+{
+    return _stringCopy(s, src, n);
 }
 
 const char *stringGet(char *str)

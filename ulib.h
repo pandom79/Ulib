@@ -231,6 +231,16 @@ bool stringSet(char **s, const char *src);
 bool stringCopy(char *s, const char *src);
 
 /**
+ * Return true if first 'n' characters of 'src' string are copied into 's' string, false otherwise.
+ * This function assumes that 's' string has enough space to contain 'n' characters of 'src' string.<br>
+ * @param[in] s
+ * @param[in] src
+ * @param[in] n
+ * @return true/false
+ */
+bool stringCopyN(char *s, const char *src, int n);
+
+/**
  * Return an immutable 'str' string.<br>
  * @param[in] str
  * @return const char *str
