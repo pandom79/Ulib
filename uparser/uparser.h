@@ -12,6 +12,7 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 #include "../ulib.h"
 
 #define NO_SECTION -1
+#define NO_PROPERTY -1
 
 /* Generic Errors */
 typedef enum {
@@ -23,7 +24,8 @@ typedef enum {
     DUPLICATE_VALUE_ERR = 5,
     REQUIRED_VALUE_ERR = 6,
     NUMERIC_ERR = 7,
-    EMPTY_VALUE_ERR = 8
+    EMPTY_VALUE_ERR = 8,
+    PROPERTY_ORDER_ERR = 9
 } ErrorsEnum;
 
 typedef struct {

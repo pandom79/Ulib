@@ -174,15 +174,16 @@ out:
         for (int i = 0; i < errors->size; i++)
             printf("Error [%d] = %s\n", i, (char *)arrayGet(errors, i));
     }
-
-    for (i = 0; i < persons->size; i++) {
-        Person *p = arrayGet(persons, i);
-        printf("Person %d = %s ...\n", i, p->name);
-    }
-    for (i = 0; i < events->size; i++) {
-        Event *e = arrayGet(events, i);
-        printf("Event %d = %s ...\n", i, e->city);
-    }
+    if (persons && persons->size > 0)
+        for (i = 0; i < persons->size; i++) {
+            Person *p = arrayGet(persons, i);
+            printf("Person %d = %s ...\n", i, p->name);
+        }
+    if (events && events->size > 0)
+        for (i = 0; i < events->size; i++) {
+            Event *e = arrayGet(events, i);
+            printf("Event %d = %s ...\n", i, e->city);
+        }
 
     arrayRelease(&persons);
     arrayRelease(&events);
