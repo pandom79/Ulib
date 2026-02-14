@@ -1,6 +1,6 @@
 # Ulib
 
-This library provides some functions to handle the following components:<br>
+C library which provides some functions to handle the following components:<br>
 <ul>
     <li>string</li>
     <li>array</li>

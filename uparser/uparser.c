@@ -9,6 +9,7 @@ See http://www.gnu.org/licenses/gpl-3.0.html for full license text.
 #include "uparser.h"
 
 static int SECTION_CURRENT = NO_SECTION;
+static int PROPERTY_CURRENT = NO_PROPERTY;
 static int PARSER_SECTIONS_ITEMS_LEN;
 static SectionData *PARSER_SECTIONS_ITEMS;
 static int PARSER_PROPERTIES_ITEMS_LEN;
@@ -23,6 +24,7 @@ static ErrorsData ERRORS_ITEMS[] = {
     { REQUIRED_VALUE_ERR, "The '%s' %s is required!" },
     { NUMERIC_ERR, "The '%s' property only accepts a numeric value greater than zero!" },
     { EMPTY_VALUE_ERR, "The '%s' property has an empty value!" },
+    { PROPERTY_ORDER_ERR, "Move '%s' property before '%s' property!" }
 };
 
 void parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen,
@@ -40,6 +42,7 @@ void parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen,
         PARSER_SECTIONS_ITEMS[i].count = 0;
     }
     SECTION_CURRENT = NO_SECTION;
+    PROPERTY_CURRENT = NO_PROPERTY;
     for (i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
         propertyData = &PARSER_PROPERTIES_ITEMS[i];
         propertyData->propertyCount = 0;
@@ -50,6 +53,7 @@ void parserInit(int sectionsLen, SectionData sectionsItems[], int propertiesLen,
 int parserCheckCurSec(Array **errors, bool isAggregate)
 {
     int rv = 0;
+    PROPERTY_CURRENT = NO_PROPERTY;
     if (PARSER_SECTIONS_ITEMS[SECTION_CURRENT].count > 1) {
         PropertyData *propertyData = NULL;
         for (int i = 0; i < PARSER_PROPERTIES_ITEMS_LEN; i++) {
@@ -140,7 +144,7 @@ int parseLine(char *line, int numLine, Array **keyVal, SectionData **sectionData
     assert(line);
     assert(numLine);
 
-    /* ignore comments or empty lines */
+    /* Ignore comments or empty lines */
     if (*line == '#' || *line == '\n')
         return rv;
     /* Split */
@@ -244,6 +248,16 @@ char *checkKeyVal(char *key, char *value, int numLine, SectionData **sectionData
                 error = getMsg(numLine, ERRORS_ITEMS[OCCURRENCES_ERR].desc, key, "property");
                 return error;
             } else {
+                /* Check properties order */
+                if (PROPERTY_CURRENT != NO_PROPERTY &&
+                    currentPropertyData->property.id < PROPERTY_CURRENT) {
+                    error = getMsg(numLine, ERRORS_ITEMS[PROPERTY_ORDER_ERR].desc,
+                                   currentPropertyData->property.desc,
+                                   PARSER_PROPERTIES_ITEMS[PROPERTY_CURRENT].property.desc);
+                }
+                PROPERTY_CURRENT = currentPropertyData->property.id;
+                if (error)
+                    return error;
                 /* Check empty value */
                 if (stringEquals(value, "")) {
                     error = getMsg(numLine, ERRORS_ITEMS[EMPTY_VALUE_ERR].desc, key);

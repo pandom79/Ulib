@@ -120,7 +120,7 @@ static void htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
             }
             /* We cannot use arrayRemove() function because it decreases
              * the size of the array losing some hash indexes.
-             * Moreover, if a release function pointer is set we lose the items inside
+             * Moreover, if a release function pointer is set, we lose the items inside
              * which must be added to the new hashtable now.
             */
             objectRelease(&htEntry->htItems->arr);
@@ -128,7 +128,7 @@ static void htResize(Ht **ht, int capacity, void (*releaseFn)(void **))
             objectRelease(&htEntry);
         }
     }
-    /* We cannot use htRelease() function for the said above reasons. */
+    /* We cannot use htRelease() function due to same reasons. */
     objectRelease(&(*ht)->htEntries->arr);
     objectRelease(&(*ht)->htEntries);
     objectRelease(&(*ht));

@@ -39,23 +39,23 @@ Time *timeNew(Time *timeFrom)
     long *durationMillisec = calloc(1, sizeof(long));
     assert(durationMillisec);
     if (!timeFrom) {
-        /* Get the second with CLOCK_REALTIME */
+        /* Get the seconds with CLOCK_REALTIME */
         struct timespec timeSpec = { 0 };
         clock_gettime(CLOCK_REALTIME, &timeSpec);
         *sec = timeSpec.tv_sec;
         *milliSec = round(timeSpec.tv_nsec / 1.0e6);
-        //Duration
+        /* Get the duration with CLOCK_MONOTONIC because it must not be affected by system time changing */
         struct timespec durationSpec = { 0 };
-        /* We use CLOCK_MONOTONIC because the duration must not be affected by system time changing */
         clock_gettime(CLOCK_MONOTONIC, &durationSpec);
         *durationSec = durationSpec.tv_sec;
-        // Convert nanoseconds to milliseconds
+        /* Convert nanoseconds to milliseconds */
         *durationMillisec = round(durationSpec.tv_nsec / 1.0e6);
         if (*durationMillisec > 999) {
             (*durationSec)++;
             *durationMillisec = 0;
         }
     } else {
+        /* Seconds */
         *sec = *timeFrom->sec;
         *milliSec = *timeFrom->milliSec;
         /* Duration */
